@@ -1,5 +1,5 @@
 # ExpiryEats
-The code repository for ExpiryEats
+The code repository for ExpiryEats.
 
 
 
