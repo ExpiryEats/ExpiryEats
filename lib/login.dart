@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('log In Screen'),
+        title: const Text('Login Screen'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Log In'),
-          onPressed: () {
-            // what happens after button press
-            // move the home screen
-          },
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Username: (email)',
+              ),
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Password:',
+              ),
+              obscureText: true,
+            ),
+            ElevatedButton(
+              child: const Text('Login'),
+              onPressed: () {
+                // connect the db and check if user credentials are correct
+                // move the next screen, 
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 }
-// add username field
-// add password field
+
 // add "click here to register" which will take the user to the registration screen.
