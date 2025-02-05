@@ -71,10 +71,19 @@ class HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppTheme.surface,
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: AppTheme.primary40,
+        unselectedItemColor: AppTheme.unselected,
+        unselectedLabelStyle: TextStyle(color: AppTheme.unselected),
         currentIndex: _selectedIndex,
         onTap: onTapHandler,
         items: _bottomNavigationBarItems,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        foregroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.primary80,
+        child: Icon(Icons.add)
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
