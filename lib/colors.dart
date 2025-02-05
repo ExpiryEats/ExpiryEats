@@ -13,5 +13,6 @@ class AppTheme {
   static const Color tertiary40 = Color(0xff2e6768);
   static const Color tertiary90 = Color(0xffb3edee);
   static const Color surface = Color(0xfff8faf0);
+  static const Color unselected = Color(0xffaaaaaa);
   static const Color error = Color(0xffba1a1a);
 }
