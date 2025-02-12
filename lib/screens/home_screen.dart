@@ -83,7 +83,6 @@ class HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppTheme.primary80,
         child: Icon(Icons.add)
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
