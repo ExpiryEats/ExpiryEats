@@ -1,3 +1,4 @@
+import 'package:expiry_eats/screens/recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
@@ -17,7 +18,7 @@ class HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   
   final List<Widget> _pages = [
-    // const BpmScreen(),
+    const RecipeScreen(),
     // const HarmonyScreen(),
     // const TunerScreen(),
   ];
