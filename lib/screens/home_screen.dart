@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
+import 'package:expiry_eats/screens/profile_screen.dart'; 
+
 
 // Change Made
 
@@ -17,9 +19,7 @@ class HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   
   final List<Widget> _pages = [
-    // const BpmScreen(),
-    // const HarmonyScreen(),
-    // const TunerScreen(),
+    ProfileScreen(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
