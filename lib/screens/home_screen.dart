@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
-
+import 'package:expiry_eats/screens/notification_screen.dart';
 
 // Change Made
 
@@ -18,12 +18,13 @@ class HomeScreenState extends State<HomeScreen> {
   // Page Controller
   int _selectedIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
-  
+
   final List<Widget> _pages = [
-    const Center(child: Text('Home Screen will be added here')), // Placeholder widget
+    const Center(
+        child: Text('Home Screen will be added here')), // Placeholder widget
     const InventoryScreen(),
     const RecipeScreen(),
-    const SizedBox(), // Placeholder for NotificationsScreen
+    const NotificationScreen(), // Placeholder for NotificationsScreen
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
@@ -49,7 +50,7 @@ class HomeScreenState extends State<HomeScreen> {
     setState(() => _selectedIndex = index);
 
     _pageController.animateToPage(
-      index, 
+      index,
       duration: const Duration(milliseconds: 750),
       curve: Curves.ease,
     );
@@ -82,11 +83,10 @@ class HomeScreenState extends State<HomeScreen> {
         items: _bottomNavigationBarItems,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        foregroundColor: AppTheme.surface,
-        backgroundColor: AppTheme.primary80,
-        child: Icon(Icons.add)
-      ),
+          onPressed: () {},
+          foregroundColor: AppTheme.surface,
+          backgroundColor: AppTheme.primary80,
+          child: Icon(Icons.add)),
     );
   }
 }
