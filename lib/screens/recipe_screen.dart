@@ -26,7 +26,14 @@ class RecipeScreenState extends State<RecipeScreen> {
   ];
 
   _populateRecipes(BuildContext context, double width) {
-    List<RecipeItem> output = [];
+    List<Widget> output = [
+      SearchAnchor.bar(
+        suggestionsBuilder: (BuildContext context, SearchController controller) {
+          final String input = controller.value.text;
+          return [Text('Test'), Text('Test 2')];
+        },
+      )
+    ];
     for (Recipe recipe in _recipes) {
       output.add(RecipeItem(name: recipe.name, imgSrc: recipe.imgSrc,));
     }
