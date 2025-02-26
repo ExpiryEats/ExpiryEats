@@ -2,10 +2,8 @@ import 'package:expiry_eats/screens/recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
+import 'package:expiry_eats/screens/profile_screen.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
-
-
-// Change Made
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,10 +25,6 @@ class HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.account_circle_outlined),
-      label: 'Profile',
-    ),
     BottomNavigationBarItem(
       icon: Icon(Icons.shopping_cart),
       label: 'Inventory',
@@ -64,7 +58,20 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constants.customAppBar(title: 'Expiry Eats'),
+      appBar: AppBar(
+        title: Text('Expiry Eats'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle, size: 30.0), // Increase the size here
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
+          ),
+        ],
+      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
