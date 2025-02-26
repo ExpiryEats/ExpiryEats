@@ -17,12 +17,6 @@ class RecipeScreenState extends State<RecipeScreen> {
     Recipe(name: "Recipe Name", imgSrc: "Test"),
     Recipe(name: "Recipe Name", imgSrc: "Test"),
     Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
   ];
 
   _populateRecipes(BuildContext context, double width) {
@@ -37,7 +31,7 @@ class RecipeScreenState extends State<RecipeScreen> {
   void dispose() {
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return _recipes.isNotEmpty ? Stack(
