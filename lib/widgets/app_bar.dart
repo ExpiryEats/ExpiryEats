@@ -13,10 +13,7 @@ class Constants {
             fontWeight: FontWeight.w500,
           ),
         ),
-        // Image.asset(
-        //   'assets/icons/logo_filled.png',
-        //   height: 60,
-        // )
+       
       ]
     ),
     backgroundColor: AppTheme.primary40,

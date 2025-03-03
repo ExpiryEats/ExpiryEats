@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expiry_eats/colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   final TextEditingController fullNameController =
@@ -15,6 +16,7 @@ class ProfileScreen extends StatelessWidget {
         title: Text('My Profile'),
         centerTitle: true, // Center the title
       ),
+      backgroundColor: AppTheme.primary80,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -23,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 250.0, // Set the desired width
+                width: 500.0, // Set the desired width
                 child: TextField(
                   controller: fullNameController,
                   decoration: InputDecoration(
@@ -38,7 +40,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               Container(
-                width: 250.0, // Set the desired width
+                width: 500.0, // Set the desired width
                 child: TextField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -53,7 +55,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               Container(
-                width: 250.0, // Set the desired width
+                width: 500.0, // Set the desired width
                 child: TextField(
                   controller: householdIdController,
                   decoration: InputDecoration(
@@ -68,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               Container(
-                width: 250.0, // Set the desired width
+                width: 500.0, // Set the desired width
                 child: TextField(
                   controller: dietaryRequirementsController,
                   decoration: InputDecoration(
