@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final TextEditingController fullNameController = TextEditingController();  //user name
+  final TextEditingController fullNameController =
+      TextEditingController(); //user name
   final TextEditingController emailController = TextEditingController();
   final TextEditingController householdIdController = TextEditingController();
-  final TextEditingController dietaryRequirementsController = TextEditingController(); // New controller
+  final TextEditingController dietaryRequirementsController =
+      TextEditingController(); // New controller
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,8 @@ class ProfileScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                   ),
                 ),
               ),
@@ -43,7 +46,8 @@ class ProfileScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                   ),
                 ),
               ),
@@ -57,7 +61,8 @@ class ProfileScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                   ),
                 ),
               ),
@@ -71,7 +76,8 @@ class ProfileScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                   ),
                 ),
               ),
