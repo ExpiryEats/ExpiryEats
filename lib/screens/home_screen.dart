@@ -4,9 +4,6 @@ import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
 
-
-// Change Made
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -65,11 +62,8 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Constants.customAppBar(title: 'Expiry Eats'),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() => _selectedIndex = index);
-        },
+      body: IndexedStack(
+        index: _selectedIndex,
         children: _pages,
       ),
       backgroundColor: AppTheme.surface,
