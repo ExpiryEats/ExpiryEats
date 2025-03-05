@@ -40,7 +40,7 @@ class RecipeScreenState extends State<RecipeScreen> {
   void dispose() {
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return _allRecipes.isNotEmpty ? Stack(
