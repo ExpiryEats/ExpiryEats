@@ -2,6 +2,7 @@ import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/recipe.dart';
+import 'package:expiry_eats/recipe_manager.dart';
 import 'package:expiry_eats/widgets/recipe_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 
@@ -13,18 +14,26 @@ class RecipeScreen extends StatefulWidget {
 }
 
 class RecipeScreenState extends State<RecipeScreen> {
-  final List<Recipe> _recipes = [
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
-    Recipe(name: "Recipe Name", imgSrc: "Test"),
+  final List<Recipe> _allRecipes = [
+    Recipe(name: "Test Recipe", imgSrc: "Test", ingredients: ['bacon', 'pasta', 'tomato']),
+    Recipe(name: "Omelette", imgSrc: "Test", ingredients: ['egg', 'cheese', 'spinach']),
+    Recipe(name: "Lasagna", imgSrc: "Test", ingredients: ['pasta', 'beef', 'cheese']),
   ];
 
+  late List<Recipe> _displayRecipes;
+
   _populateRecipes(BuildContext context, double width) {
-    List<RecipeItem> output = [];
-    for (Recipe recipe in _recipes) {
+    List<Widget> output = [];
+    for (Recipe recipe in _displayRecipes) {
       output.add(RecipeItem(name: recipe.name, imgSrc: recipe.imgSrc,));
     }
     return output;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _displayRecipes = _allRecipes;
   }
 
   @override
@@ -34,17 +43,28 @@ class RecipeScreenState extends State<RecipeScreen> {
   
   @override
   Widget build(BuildContext context) {
-    return _recipes.isNotEmpty ? Stack(
+    return _allRecipes.isNotEmpty ? Stack(
       children: [
-        FadingEdgeScrollView.fromScrollView(
-          gradientFractionOnStart: 0.2,
-          gradientFractionOnEnd: 0.2,
-          child: ListView(
-            controller: ScrollController(),
-            children: _populateRecipes(context, MediaQuery.sizeOf(context).width)
+        Align(
+          alignment: Alignment(0.0, -1),
+          child: SearchBar(
+            leading: const Icon(Icons.search),
+            hintText: 'Search',
+            onChanged: (query) { setState(() => _displayRecipes = RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes)); },
           ),
         ),
-      ]
+        Padding(
+          padding: EdgeInsets.only(top: 60.0),
+          child: FadingEdgeScrollView.fromScrollView(
+            gradientFractionOnStart: 0.2,
+            gradientFractionOnEnd: 0.2,
+            child: ListView(
+              controller: ScrollController(),
+              children: _populateRecipes(context, MediaQuery.sizeOf(context).width)
+            ),
+          ),
+        ),
+      ],
     ) : Align(
       alignment: Alignment.center,
       child: SizedBox(

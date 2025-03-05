@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/widgets/inventory_item.dart';
 
+
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
 
@@ -9,7 +10,7 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class InventoryScreenState extends State<InventoryScreen> {
-
+  
   final List<Map<String, String>> _boxes = [];
 
   @override
