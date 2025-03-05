@@ -1,8 +1,6 @@
 import 'package:expiry_eats/widgets/Inventory_box.dart';
 import 'package:flutter/material.dart';
 
-
-
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
 
@@ -10,15 +8,11 @@ class InventoryScreen extends StatefulWidget {
 InventoryScreenState createState() => InventoryScreenState();
 }
 
-
-
 class InventoryScreenState extends State<InventoryScreen> {
 
-  List<InventoryBox> _boxes = [];
+  final List<InventoryBox> _boxes = [];
 
-
-
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
@@ -32,9 +26,8 @@ class InventoryScreenState extends State<InventoryScreen> {
         onPressed: () {
           setState(() {
             // Use your logic to get an imageAssetPath and itemName for the new InventoryBox
-            final newImagePath = 'lib/assets/testing_image.jpg';
+            final newImagePath = 'assets/testing_image.jpg';
             final newItemName = 'Item Name';
-
             _boxes.add(InventoryBox(imageAssetPath: newImagePath, itemName: newItemName));
           });
         },
