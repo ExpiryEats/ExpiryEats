@@ -13,7 +13,7 @@ ExpiryEats helps users manage their food inventory, track expiration dates, and 
 
 ## Tech Stack  
 - Frontend: Flutter (Dart)  
-- Backend: Firebase (Firestore, Authentication, Cloud Functions)  
+- Backend: Local 
 - Notifications: Firebase Cloud Messaging (FCM)  
 - Hosting: Firebase Hosting
 
