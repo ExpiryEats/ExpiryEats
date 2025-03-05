@@ -1,4 +1,5 @@
 import 'package:expiry_eats/colors.dart';
+import 'package:expiry_eats/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'register_screen.dart';
@@ -35,9 +36,7 @@ class LoginScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Expiry Eats'),
-      ),
+      appBar: Constants.customAppBar(context: context, title: 'Expiry Eats'),
       body: Container(
         color: AppTheme.primary80,
         padding: const EdgeInsets.all(16.0),
@@ -53,7 +52,7 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                  Image.asset('lib/assets/ExpiryLogo.png', height: 160),
+                  Image.asset('assets/ExpiryLogo.png', height: 160),
                 const Text(
                   'Expiry Eats',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),

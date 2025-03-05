@@ -1,4 +1,5 @@
 import 'package:expiry_eats/colors.dart';
+import 'package:expiry_eats/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -35,9 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
+      appBar: Constants.customAppBar(context: context, title: 'Register'),
       body: Container(
         color: AppTheme.primary80,
         padding: const EdgeInsets.all(16.0),
@@ -55,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset('lib/assets/ExpiryLogo.png', height: 150), 
+                  Image.asset('assets/ExpiryLogo.png', height: 150), 
                   const SizedBox(height: 16),
                   TextField(
                     controller: _firstNameController,

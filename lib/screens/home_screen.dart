@@ -19,11 +19,9 @@ class HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController(initialPage: 0);
 
   final List<Widget> _pages = [
-    const Center(
-        child: Text('Home Screen will be added here')), // Placeholder widget
     const InventoryScreen(),
     const RecipeScreen(),
-    const NotificationScreen(), // Placeholder for NotificationsScreen
+    const NotificationScreen(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
@@ -60,7 +58,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constants.customAppBar(title: 'Expiry Eats'),
+      appBar: Constants.customAppBar(context: context, title: 'Expiry Eats'),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {

@@ -1,6 +1,6 @@
 import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
-//import 'package:expiry_eats/colors.dart';
+import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/notification_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 
@@ -46,32 +46,30 @@ class NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _notifications.isNotEmpty
-        ? Stack(
-            children: [
-              FadingEdgeScrollView.fromScrollView(
-                gradientFractionOnStart: 0.2,
-                gradientFractionOnEnd: 0.2,
-                child: ListView(
-                  controller: ScrollController(),
-                  children: _populateNotifications(),
-                ),
-              ),
-            ],
-          )
-        : Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Align(
-                alignment: Alignment(0.0, 0.0),
-                child: Text(
-                  'No Notifications',
-                  style: AppTextStyle.bold(),
-                ),
-              ),
-            ),
-          );
+    return _notifications.isNotEmpty ? Stack(
+      children: [
+        FadingEdgeScrollView.fromScrollView(
+          gradientFractionOnStart: 0.2,
+          gradientFractionOnEnd: 0.2,
+          child: ListView(
+            controller: ScrollController(),
+            children: _populateNotifications(),
+          ),
+        ),
+      ],
+    ) : Align(
+      alignment: Alignment.center,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Align(
+          alignment: Alignment(0.0, 0.0),
+          child: Text(
+            'No Notifications',
+            style: AppTextStyle.bold(),
+          ),
+        ),
+      ),
+    );
   }
 }
