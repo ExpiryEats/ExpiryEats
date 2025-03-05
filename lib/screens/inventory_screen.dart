@@ -73,7 +73,7 @@ class InventoryScreenState extends State<InventoryScreen> {
                 ),
                 child: const Center(
                   child: Text(
-                    'Search Bar (Coming Soon)',
+                    'Search Bar',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16,

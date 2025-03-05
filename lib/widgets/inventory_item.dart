@@ -1,3 +1,4 @@
+import 'package:expiry_eats/screens/item_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/styles.dart'; 
 
@@ -21,7 +22,12 @@ class InventoryItem extends StatelessWidget {
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {
-              debugPrint("Item tapped: $itemName");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => IteminfoScreen(
+                  itemName: itemName))
+              );
+              debugPrint('Item tapped: $itemName');
             },
             child: SizedBox(
               height: MediaQuery.of(context).size.width * 0.5, 
@@ -49,7 +55,7 @@ class InventoryItem extends StatelessWidget {
                         ),
                         const SizedBox(height: 64), // Adds some spacing
                         Text(
-                          "Description...", 
+                          'Description...', 
                           style: AppTextStyle.small(),
                         ),
                       ],
