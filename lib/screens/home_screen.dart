@@ -61,7 +61,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constants.customAppBar(title: 'Expiry Eats'),
+      appBar: Constants.customAppBar(context: context, title: 'Expiry Eats'),
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,
