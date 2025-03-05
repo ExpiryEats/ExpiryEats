@@ -60,20 +60,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Expiry Eats'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle, size: 30.0), // Increase the size here
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: Constants.customAppBar(title: 'Expiry Eats'),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
