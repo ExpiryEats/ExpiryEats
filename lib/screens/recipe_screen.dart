@@ -43,18 +43,17 @@ class RecipeScreenState extends State<RecipeScreen> {
   
   @override
   Widget build(BuildContext context) {
-    return _allRecipes.isNotEmpty ? Stack(
+    return _allRecipes.isNotEmpty ? Column(
       children: [
-        Align(
-          alignment: Alignment(0.0, -1),
+        Padding(
+          padding: EdgeInsets.all(8.0),
           child: SearchBar(
             leading: const Icon(Icons.search),
-            hintText: 'Search',
+            hintText: 'Search Recipes',
             onChanged: (query) { setState(() => _displayRecipes = RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes)); },
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 60.0),
+        Expanded(
           child: FadingEdgeScrollView.fromScrollView(
             gradientFractionOnStart: 0.2,
             gradientFractionOnEnd: 0.2,
