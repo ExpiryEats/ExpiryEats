@@ -1,3 +1,5 @@
+import 'package:expiry_eats/styles.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/widgets/inventory_item.dart';
 
@@ -11,7 +13,7 @@ class InventoryScreen extends StatefulWidget {
 
 class InventoryScreenState extends State<InventoryScreen> {
   
-  final List<Map<String, String>> _boxes = [];
+  final Map<String, List<Map<String, String>>> _groupedItems = {};
 
   @override
   void initState() {
@@ -21,31 +23,48 @@ class InventoryScreenState extends State<InventoryScreen> {
 
   void _populateTestData() {
     // Test items for list
-    setState(() {
-      _boxes.addAll([
+    final testItems = [
+
         {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
+          'imageAssetPath': 'assets/testing_image.jpg',
           'itemName': 'Apples',
+          'category': 'Fruits',
         },
         {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
+          'imageAssetPath': 'assets/testing_image.jpg',
           'itemName': 'Bananas',
+          'category': 'Fruits',
         },
         {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
+          'imageAssetPath': 'assets/testing_image.jpg',
           'itemName': 'Carrots',
+          'category': 'Vegetables',
         },
         {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
+          'imageAssetPath': 'assets/testing_image.jpg',
           'itemName': 'Milk',
+          'category': 'Dairy',
         },
         {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
+          'imageAssetPath': 'assets/testing_image.jpg',
           'itemName': 'Bread',
+          'category': 'Carbohydrates',
         },
-      ]);
-    });
+      ];
+
+
+      for (final item in testItems) {
+        final category = item['category']!;
+        if (_groupedItems.containsKey(category)) {
+          _groupedItems[category]!.add(item);
+        } else {
+          _groupedItems[category] = [item];
+        }
+      }
+
+      setState(() {});
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,39 +103,77 @@ class InventoryScreenState extends State<InventoryScreen> {
               ),
             ),
           ),
-          // Inventory Grid
+          // Inventory List
           Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3, // Adjusts teh space between boxes
-                crossAxisSpacing: 8, // Spacing between columns
-                mainAxisSpacing: 8, // Spacing between rows
-              ),
-              itemCount: _boxes.length,
-              itemBuilder: (context, index) {
-                final item = _boxes[index];
-                return InventoryItem(
-                  key: ValueKey(item['itemName']),
-                  imageAssetPath: item['imageAssetPath']!,
-                  itemName: item['itemName']!,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            final newImagePath = 'lib/assets/testing_image.jpg';
-            final newItemName = 'Item ${_boxes.length + 1}';
+            child: ListView(
+              children: _groupedItems.entries.map((entry) {
+                final category = entry.key;
+                final items  = entry.value;
 
-            _boxes.add({
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        category,
+                        style: AppTextStyle.bold(),
+                      ),
+                    ),
+                  
+              
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3, // Adjusts teh space between boxes
+                      crossAxisSpacing: 8, // Spacing between columns
+                      mainAxisSpacing: 8, // Spacing between rows
+                    ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return InventoryItem(
+                        key: ValueKey(item['itemName']),
+                        imageAssetPath: item['imageAssetPath']!,
+                        itemName: item['itemName']!,
+                        category: category,
+                      );
+                    },
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    ),
+
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        setState(() {
+          final newImagePath = 'assets/testing_image.jpg';
+          final newItemName = 'Item ${_groupedItems.values.fold(0, (sum, items) => sum + items.length) + 1}';
+          final newCategory = 'Fruits';
+
+          if (_groupedItems.containsKey(newCategory)) {
+            _groupedItems[newCategory]! .add({
+
               'imageAssetPath': newImagePath,
-              'itemName': newItemName,
+              'itemName' : newItemName,
+              'category' : newCategory,
             });
+          } else {
+            _groupedItems[newCategory] = [
+            {
+            'imageAssetPath' : newImagePath,
+            'itemName' : newItemName,
+            'category' : newCategory,
+                }
+              ];
+            }
           });
         },
         child: const Icon(Icons.add),
