@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:expiry_eats/item.dart';
+import 'package:expiry_eats/inventory_manager.dart';
 import 'package:expiry_eats/widgets/inventory_item.dart';
 
 
@@ -11,38 +13,25 @@ class InventoryScreen extends StatefulWidget {
 
 class InventoryScreenState extends State<InventoryScreen> {
   
-  final List<Map<String, String>> _boxes = [];
+  final List<Item> _allItems = [];
+  List<Item> _displayedItems = [];
 
   @override
   void initState() {
     super.initState();
     _populateTestData();
+    _displayedItems = _allItems;
   }
 
   void _populateTestData() {
     // Test items for list
     setState(() {
-      _boxes.addAll([
-        {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
-          'itemName': 'Apples',
-        },
-        {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
-          'itemName': 'Bananas',
-        },
-        {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
-          'itemName': 'Carrots',
-        },
-        {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
-          'itemName': 'Milk',
-        },
-        {
-          'imageAssetPath': 'lib/assets/testing_image.jpg',
-          'itemName': 'Bread',
-        },
+      _allItems.addAll([
+        Item(name: 'Apples', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Bananas', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Carrots', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Milk', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Bread', imgSrc: 'assets/testing_image.jpg')
       ]);
     });
   }
@@ -52,36 +41,12 @@ class InventoryScreenState extends State<InventoryScreen> {
     return Scaffold(
       body: Column(
         children: [
-          // Search Bar Area (Placeholder for now)
-          Container(
-            height: 120, 
-            color: Colors.green[200], // Background
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), 
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(30),
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    'Search Bar',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: SearchBar(
+              leading: const Icon(Icons.search),
+              hintText: 'Search Inventory',
+              onChanged: (query) { setState(() => _displayedItems = InventoryManager.filterInventory(query.toLowerCase(), _allItems)); },
             ),
           ),
           // Inventory Grid
@@ -93,13 +58,13 @@ class InventoryScreenState extends State<InventoryScreen> {
                 crossAxisSpacing: 8, // Spacing between columns
                 mainAxisSpacing: 8, // Spacing between rows
               ),
-              itemCount: _boxes.length,
+              itemCount: _displayedItems.length,
               itemBuilder: (context, index) {
-                final item = _boxes[index];
+                final item = _displayedItems[index];
                 return InventoryItem(
-                  key: ValueKey(item['itemName']),
-                  imageAssetPath: item['imageAssetPath']!,
-                  itemName: item['itemName']!,
+                  key: ValueKey(item.name),
+                  imageAssetPath: item.imgSrc,
+                  itemName: item.name,
                 );
               },
             ),
@@ -110,13 +75,10 @@ class InventoryScreenState extends State<InventoryScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            final newImagePath = 'lib/assets/testing_image.jpg';
-            final newItemName = 'Item ${_boxes.length + 1}';
+            final newImagePath = 'assets/testing_image.jpg';
+            final newItemName = 'Item ${_allItems.length + 1}';
 
-            _boxes.add({
-              'imageAssetPath': newImagePath,
-              'itemName': newItemName,
-            });
+            _allItems.add(Item(name: newItemName, imgSrc: newImagePath));
           });
         },
         child: const Icon(Icons.add),
