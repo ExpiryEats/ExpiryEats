@@ -2,7 +2,6 @@ import 'package:expiry_eats/screens/recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
-import 'package:expiry_eats/screens/profile_screen.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
 import 'package:expiry_eats/screens/notification_screen.dart';
 
