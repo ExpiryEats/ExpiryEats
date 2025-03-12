@@ -1,6 +1,5 @@
 import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/notification_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 

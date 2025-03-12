@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/item.dart';
-import 'package:expiry_eats/inventory_manager.dart';
+import 'package:expiry_eats/managers/inventory_manager.dart';
 import 'package:expiry_eats/widgets/inventory_item.dart';
 
 

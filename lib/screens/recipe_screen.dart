@@ -1,8 +1,7 @@
 import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/recipe.dart';
-import 'package:expiry_eats/recipe_manager.dart';
+import 'package:expiry_eats/managers/recipe_manager.dart';
 import 'package:expiry_eats/widgets/recipe_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 
