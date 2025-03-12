@@ -15,7 +15,7 @@ class Constants {
         ),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.account_circle, size: 30.0), // Profile Icon
+            icon: const Icon(Icons.menu, size: 30.0), // Profile Icon
             onSelected: (String value) {
               if (value == "Profile") {
                 Navigator.push(

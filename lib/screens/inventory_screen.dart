@@ -1,3 +1,4 @@
+import 'package:expiry_eats/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:expiry_eats/managers/inventory_manager.dart';
@@ -39,6 +40,7 @@ class InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.surface,
       body: Column(
         children: [
           Padding(
@@ -73,6 +75,9 @@ class InventoryScreenState extends State<InventoryScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.primary40,
+        foregroundColor: AppTheme.surface,
+        hoverColor: AppTheme.primary80,
         onPressed: () {
           setState(() {
             final newImagePath = 'assets/testing_image.jpg';

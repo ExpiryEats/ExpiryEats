@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
 import 'package:expiry_eats/screens/dashboard_screen.dart';
-import 'package:expiry_eats/screens/profile_screen.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
 import 'package:expiry_eats/screens/notification_screen.dart';
 
@@ -81,11 +80,6 @@ class HomeScreenState extends State<HomeScreen> {
         onTap: onTapHandler,
         items: _bottomNavigationBarItems,
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          foregroundColor: AppTheme.surface,
-          backgroundColor: AppTheme.primary80,
-          child: Icon(Icons.add)),
     );
   }
 }

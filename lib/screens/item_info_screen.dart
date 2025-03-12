@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/styles.dart';
 
-
-
-
-
 class IteminfoScreen extends StatelessWidget {
   final String itemName;
-
 
   const IteminfoScreen({
     super.key,
@@ -17,7 +12,7 @@ class IteminfoScreen extends StatelessWidget {
     Future<Map<String, dynamic>> fetchItemInfo() async {
       return {
         'itemName': itemName,
-        'itemImage': 'lib/assets/testing_image.jpg',
+        'itemImage': 'assets/testing_image.jpg',
         'itemDateAdded': '2025/03/01',
         'itemExpiryDate': '2025/03/20',
       };
