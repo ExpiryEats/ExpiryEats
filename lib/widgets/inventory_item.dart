@@ -5,12 +5,23 @@ import 'package:expiry_eats/styles.dart';
 class InventoryItem extends StatelessWidget {
   final String imageAssetPath;
   final String itemName;
-
-  const InventoryItem({
+  final String category;
+   InventoryItem({
     super.key,
     required this.imageAssetPath,
     required this.itemName,
+    required this.category
   });
+
+  final List<String> foodCatogories = [
+    'Carbohydrates'
+    'Dairy'
+    'Fruits'
+    'Protein'
+    'Sweets and Fats'
+    'Vegetables'
+    'Miscellaneous'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +64,12 @@ class InventoryItem extends StatelessWidget {
                           itemName,
                           style: AppTextStyle.bold(),
                         ),
-                        const SizedBox(height: 64), // Adds some spacing
+                        const SizedBox(height: 8),
+                        Text(
+                          category,
+                          style: AppTextStyle.medium(),
+                        ),
+                        const SizedBox(height: 32), // Adds some spacing
                         Text(
                           'Description...', 
                           style: AppTextStyle.small(),
