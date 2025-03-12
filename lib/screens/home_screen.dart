@@ -2,6 +2,8 @@ import 'package:expiry_eats/screens/recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
+import 'package:expiry_eats/screens/dashboard_screen.dart';
+import 'package:expiry_eats/screens/profile_screen.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
 import 'package:expiry_eats/screens/notification_screen.dart';
 
@@ -14,16 +16,21 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   // Page Controller
-  int _selectedIndex = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  int _selectedIndex = 1;
+  final PageController _pageController = PageController(initialPage: 1);
 
   final List<Widget> _pages = [
+    const DashboardScreen(),
     const InventoryScreen(),
     const RecipeScreen(),
     const NotificationScreen(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.dashboard),
+      label: 'Dashboard',
+    ),
     BottomNavigationBarItem(
       icon: Icon(Icons.shopping_cart),
       label: 'Inventory',
@@ -78,8 +85,7 @@ class HomeScreenState extends State<HomeScreen> {
           onPressed: () {},
           foregroundColor: AppTheme.surface,
           backgroundColor: AppTheme.primary80,
-          child: Icon(Icons.add)
-      ),
+          child: Icon(Icons.add)),
     );
   }
 }
