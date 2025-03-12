@@ -2,13 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/styles.dart';
 
-
-
-
-
 class IteminfoScreen extends StatelessWidget {
   final String itemName;
-
 
   const IteminfoScreen({
     super.key,

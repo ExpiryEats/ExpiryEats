@@ -1,6 +1,9 @@
 import 'package:expiry_eats/styles.dart';
 import 'package:flutter/foundation.dart';
+import 'package:expiry_eats/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:expiry_eats/item.dart';
+import 'package:expiry_eats/managers/inventory_manager.dart';
 import 'package:expiry_eats/widgets/inventory_item.dart';
 
 
@@ -12,47 +15,28 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class InventoryScreenState extends State<InventoryScreen> {
-  
   final Map<String, List<Map<String, String>>> _groupedItems = {};
+  final List<Item> _allItems = [];
+  List<Item> _displayedItems = [];
 
   @override
   void initState() {
     super.initState();
     _populateTestData();
+    _displayedItems = _allItems;
   }
 
   void _populateTestData() {
     // Test items for list
-    final testItems = [
-
-        {
-          'imageAssetPath': 'assets/testing_image.jpg',
-          'itemName': 'Apples',
-          'category': 'Fruits',
-        },
-        {
-          'imageAssetPath': 'assets/testing_image.jpg',
-          'itemName': 'Bananas',
-          'category': 'Fruits',
-        },
-        {
-          'imageAssetPath': 'assets/testing_image.jpg',
-          'itemName': 'Carrots',
-          'category': 'Vegetables',
-        },
-        {
-          'imageAssetPath': 'assets/testing_image.jpg',
-          'itemName': 'Milk',
-          'category': 'Dairy',
-        },
-        {
-          'imageAssetPath': 'assets/testing_image.jpg',
-          'itemName': 'Bread',
-          'category': 'Carbohydrates',
-        },
-      ];
-
-
+    setState(() {
+      _allItems.addAll([
+        Item(name: 'Apples', category: 'Fruits', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Bananas', category: 'Fruits', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Carrots', category: 'Vegetables', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Milk', category: 'Dairy', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Bread', category: 'Carbohydrates', imgSrc: 'assets/testing_image.jpg')
+      ]);
+      
       for (final item in testItems) {
         final category = item['category']!;
         if (_groupedItems.containsKey(category)) {
@@ -61,46 +45,22 @@ class InventoryScreenState extends State<InventoryScreen> {
           _groupedItems[category] = [item];
         }
       }
-
-      setState(() {});
+    });
   }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.surface,
       body: Column(
         children: [
-          // Search Bar Area (Placeholder for now)
-          Container(
-            height: 120, 
-            color: Colors.green[200], // Background
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), 
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(30),
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    'Search Bar',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: SearchBar(
+              leading: const Icon(Icons.search),
+              hintText: 'Search Inventory',
+              onChanged: (query) { setState(() => _displayedItems = InventoryManager.filterInventory(query.toLowerCase(), _allItems)); },
             ),
           ),
           // Inventory List
@@ -174,6 +134,38 @@ class InventoryScreenState extends State<InventoryScreen> {
                 }
               ];
             }
+//My Code
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3, // Adjusts teh space between boxes
+                crossAxisSpacing: 8, // Spacing between columns
+                mainAxisSpacing: 8, // Spacing between rows
+              ),
+              itemCount: _displayedItems.length,
+              itemBuilder: (context, index) {
+                final item = _displayedItems[index];
+                return InventoryItem(
+                  key: ValueKey(item.name),
+                  imageAssetPath: item.imgSrc,
+                  itemName: item.name,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.primary40,
+        foregroundColor: AppTheme.surface,
+        hoverColor: AppTheme.primary80,
+        onPressed: () {
+          setState(() {
+            final newImagePath = 'assets/testing_image.jpg';
+            final newItemName = 'Item ${_allItems.length + 1}';
+
+            _allItems.add(Item(name: newItemName, imgSrc: newImagePath));
           });
         },
         child: const Icon(Icons.add),

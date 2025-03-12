@@ -1,8 +1,7 @@
 import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/recipe.dart';
-import 'package:expiry_eats/recipe_manager.dart';
+import 'package:expiry_eats/managers/recipe_manager.dart';
 import 'package:expiry_eats/widgets/recipe_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 
@@ -43,18 +42,17 @@ class RecipeScreenState extends State<RecipeScreen> {
   
   @override
   Widget build(BuildContext context) {
-    return _allRecipes.isNotEmpty ? Stack(
+    return _allRecipes.isNotEmpty ? Column(
       children: [
-        Align(
-          alignment: Alignment(0.0, -1),
+        Padding(
+          padding: EdgeInsets.all(8.0),
           child: SearchBar(
             leading: const Icon(Icons.search),
-            hintText: 'Search',
+            hintText: 'Search Recipes',
             onChanged: (query) { setState(() => _displayRecipes = RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes)); },
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 60.0),
+        Expanded(
           child: FadingEdgeScrollView.fromScrollView(
             gradientFractionOnStart: 0.2,
             gradientFractionOnEnd: 0.2,
