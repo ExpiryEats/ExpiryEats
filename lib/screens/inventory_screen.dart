@@ -15,15 +15,31 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class InventoryScreenState extends State<InventoryScreen> {
-  final Map<String, List<Map<String, String>>> _groupedItems = {};
+  late Map<String, List<Item>> _groupedDisplayItems;
   final List<Item> _allItems = [];
-  List<Item> _displayedItems = [];
+  List<Item> _displayItems = [];
 
   @override
   void initState() {
     super.initState();
     _populateTestData();
-    _displayedItems = _allItems;
+    _displayItems = _allItems;
+    _groupedDisplayItems = _updateGroups();
+  }
+
+  Map<String, List<Item>> _updateGroups() {
+    Map<String, List<Item>> output = {};
+
+    for (final item in _displayItems) {
+      final category = item.category;
+      if (output.containsKey(category)) {
+        output[category]!.add(item);
+      } else {
+        output[category] = [item];
+      }
+    }
+
+    return output;
   }
 
   void _populateTestData() {
@@ -36,15 +52,6 @@ class InventoryScreenState extends State<InventoryScreen> {
         Item(name: 'Milk', category: 'Dairy', imgSrc: 'assets/testing_image.jpg'),
         Item(name: 'Bread', category: 'Carbohydrates', imgSrc: 'assets/testing_image.jpg')
       ]);
-      
-      for (final item in testItems) {
-        final category = item['category']!;
-        if (_groupedItems.containsKey(category)) {
-          _groupedItems[category]!.add(item);
-        } else {
-          _groupedItems[category] = [item];
-        }
-      }
     });
   }
 
@@ -60,13 +67,18 @@ class InventoryScreenState extends State<InventoryScreen> {
             child: SearchBar(
               leading: const Icon(Icons.search),
               hintText: 'Search Inventory',
-              onChanged: (query) { setState(() => _displayedItems = InventoryManager.filterInventory(query.toLowerCase(), _allItems)); },
+              onChanged: (query) {
+                setState(() {
+                  _displayItems = InventoryManager.filterInventory(query.toLowerCase(), _allItems);
+                  _groupedDisplayItems = _updateGroups();
+                });
+              },
             ),
           ),
           // Inventory List
           Expanded(
             child: ListView(
-              children: _groupedItems.entries.map((entry) {
+              children: _groupedDisplayItems.entries.map((entry) {
                 final category = entry.key;
                 final items  = entry.value;
 
@@ -80,77 +92,29 @@ class InventoryScreenState extends State<InventoryScreen> {
                         style: AppTextStyle.bold(),
                       ),
                     ),
-                  
-              
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 3, // Adjusts teh space between boxes
-                      crossAxisSpacing: 8, // Spacing between columns
-                      mainAxisSpacing: 8, // Spacing between rows
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 3, // Adjusts teh space between boxes
+                        crossAxisSpacing: 8, // Spacing between columns
+                        mainAxisSpacing: 8, // Spacing between rows
+                      ),
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        final item = items[index];
+                        return InventoryItem(
+                          key: ValueKey(item.name),
+                          imageAssetPath: item.imgSrc,
+                          itemName: item.name,
+                          category: category,
+                        );
+                      },
                     ),
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return InventoryItem(
-                        key: ValueKey(item['itemName']),
-                        imageAssetPath: item['imageAssetPath']!,
-                        itemName: item['itemName']!,
-                        category: category,
-                      );
-                    },
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    ),
-
-    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        setState(() {
-          final newImagePath = 'assets/testing_image.jpg';
-          final newItemName = 'Item ${_groupedItems.values.fold(0, (sum, items) => sum + items.length) + 1}';
-          final newCategory = 'Fruits';
-
-          if (_groupedItems.containsKey(newCategory)) {
-            _groupedItems[newCategory]! .add({
-
-              'imageAssetPath': newImagePath,
-              'itemName' : newItemName,
-              'category' : newCategory,
-            });
-          } else {
-            _groupedItems[newCategory] = [
-            {
-            'imageAssetPath' : newImagePath,
-            'itemName' : newItemName,
-            'category' : newCategory,
-                }
-              ];
-            }
-//My Code
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3, // Adjusts teh space between boxes
-                crossAxisSpacing: 8, // Spacing between columns
-                mainAxisSpacing: 8, // Spacing between rows
-              ),
-              itemCount: _displayedItems.length,
-              itemBuilder: (context, index) {
-                final item = _displayedItems[index];
-                return InventoryItem(
-                  key: ValueKey(item.name),
-                  imageAssetPath: item.imgSrc,
-                  itemName: item.name,
+                  ],
                 );
-              },
+              }).toList(),
             ),
           ),
         ],
@@ -163,9 +127,25 @@ class InventoryScreenState extends State<InventoryScreen> {
         onPressed: () {
           setState(() {
             final newImagePath = 'assets/testing_image.jpg';
-            final newItemName = 'Item ${_allItems.length + 1}';
+            final newItemName = 'Item ${_groupedDisplayItems.values.fold(0, (sum, items) => sum + items.length) + 1}';
+            final newCategory = 'Fruits';
 
-            _allItems.add(Item(name: newItemName, imgSrc: newImagePath));
+            if (_groupedDisplayItems.containsKey(newCategory)) {
+              _groupedDisplayItems[newCategory]!.add(
+                Item(
+                  name: newItemName,
+                  category: newCategory,
+                  imgSrc: newImagePath,
+                ));
+            } else {
+              _groupedDisplayItems[newCategory] = [
+                Item(
+                  name: newItemName,
+                  category: newCategory,
+                  imgSrc: newImagePath,
+                )
+              ];
+            }
           });
         },
         child: const Icon(Icons.add),
