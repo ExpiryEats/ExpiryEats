@@ -20,70 +20,93 @@ class ProfileScreen extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 500.0, // Set the desired width
-                child: TextField(
-                  controller: fullNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white, // White background
+              borderRadius: BorderRadius.circular(12.0), // Rounded corners
+            ),
+            padding: const EdgeInsets.all(16.0), // Padding inside the white box
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 500.0, // Set the desired width
+                  child: TextField(
+                    controller: fullNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Full Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                     ),
+<<<<<<< HEAD
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+=======
+>>>>>>> 574d8197a96f7256fe91021eca03cdf3ab02501a
                   ),
                 ),
-              ),
-              SizedBox(height: 10.0),
-              Container(
-                width: 500.0, // Set the desired width
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email Address',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                SizedBox(height: 10.0),
+                Container(
+                  width: 500.0, // Set the desired width
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email Address',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                     ),
+<<<<<<< HEAD
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+=======
+>>>>>>> 574d8197a96f7256fe91021eca03cdf3ab02501a
                   ),
                 ),
-              ),
-              SizedBox(height: 10.0),
-              Container(
-                width: 500.0, // Set the desired width
-                child: TextField(
-                  controller: householdIdController,
-                  decoration: InputDecoration(
-                    labelText: 'Household ID',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                SizedBox(height: 10.0),
+                Container(
+                  width: 500.0, // Set the desired width
+                  child: TextField(
+                    controller: householdIdController,
+                    decoration: InputDecoration(
+                      labelText: 'Household ID',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                     ),
+<<<<<<< HEAD
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+=======
+>>>>>>> 574d8197a96f7256fe91021eca03cdf3ab02501a
                   ),
                 ),
-              ),
-              SizedBox(height: 10.0),
-              Container(
-                width: 500.0, // Set the desired width
-                child: TextField(
-                  controller: dietaryRequirementsController,
-                  decoration: InputDecoration(
-                    labelText: 'Dietary Requirements',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                SizedBox(height: 10.0),
+                Container(
+                  width: 500.0, // Set the desired width
+                  child: TextField(
+                    controller: dietaryRequirementsController,
+                    decoration: InputDecoration(
+                      labelText: 'Dietary Requirements',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                     ),
+<<<<<<< HEAD
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+=======
+>>>>>>> 574d8197a96f7256fe91021eca03cdf3ab02501a
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

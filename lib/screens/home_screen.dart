@@ -2,7 +2,7 @@ import 'package:expiry_eats/screens/recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/widgets/app_bar.dart';
-import 'package:expiry_eats/screens/profile_screen.dart';
+import 'package:expiry_eats/screens/dashboard_screen.dart';
 import 'package:expiry_eats/screens/inventory_screen.dart';
 import 'package:expiry_eats/screens/notification_screen.dart';
 
@@ -15,18 +15,21 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   // Page Controller
-  int _selectedIndex = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  int _selectedIndex = 1;
+  final PageController _pageController = PageController(initialPage: 1);
 
   final List<Widget> _pages = [
-    const Center(
-        child: Text('Home Screen will be added here')), // Placeholder widget
+    const DashboardScreen(),
     const InventoryScreen(),
     const RecipeScreen(),
-    const NotificationScreen(), // Placeholder for NotificationsScreen
+    const NotificationScreen(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.dashboard),
+      label: 'Dashboard',
+    ),
     BottomNavigationBarItem(
       icon: Icon(Icons.shopping_cart),
       label: 'Inventory',
@@ -60,20 +63,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Expiry Eats'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle, size: 30.0), // Increase the size here
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: Constants.customAppBar(context: context, title: 'Expiry Eats'),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -89,12 +79,6 @@ class HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: onTapHandler,
         items: _bottomNavigationBarItems,
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          foregroundColor: AppTheme.surface,
-          backgroundColor: AppTheme.primary80,
-          child: Icon(Icons.add)
       ),
     );
   }
