@@ -24,6 +24,34 @@ class NotificationScreenState extends State<NotificationScreen> {
     },
   ];
 
+  void _confirmRemoveNotification(int index) {
+    showDialog(
+      // Displays a popup
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Remove Notification"),
+          content: Text("Are you sure you want to remove this notification?"),
+          actions: [
+            TextButton(
+              // Cancel button
+              onPressed: () => Navigator.of(context).pop(), // Close dialog
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              // Remove notification button
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+                _removeNotification(index); // Removes the notification
+              },
+              child: Text("Remove", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _removeNotification(int index) {
     setState(() {
       _notifications.removeAt(index);
@@ -35,40 +63,43 @@ class NotificationScreenState extends State<NotificationScreen> {
       return NotificationItem(
         ingredientName: notification["ingredientName"],
         daysToExpiry: notification["daysToExpiry"],
-        daysSinceReceived: notification[
-            "daysSinceReceived"], //days since the notification was recieved
-        onClose: () =>
-            _removeNotification(_notifications.indexOf(notification)),
+        daysSinceReceived: notification["daysSinceReceived"],
+        onClose:
+            () => // pressing the close button on notification would bring up conformation popup
+                _confirmRemoveNotification(
+                    _notifications.indexOf(notification)),
       );
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _notifications.isNotEmpty ? Stack(
-      children: [
-        FadingEdgeScrollView.fromScrollView(
-          gradientFractionOnStart: 0.2,
-          gradientFractionOnEnd: 0.2,
-          child: ListView(
-            controller: ScrollController(),
-            children: _populateNotifications(),
-          ),
-        ),
-      ],
-    ) : Align(
-      alignment: Alignment.center,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Align(
-          alignment: Alignment(0.0, 0.0),
-          child: Text(
-            'No Notifications',
-            style: AppTextStyle.bold(),
-          ),
-        ),
-      ),
-    );
+    return _notifications.isNotEmpty
+        ? Stack(
+            children: [
+              FadingEdgeScrollView.fromScrollView(
+                gradientFractionOnStart: 0.2,
+                gradientFractionOnEnd: 0.2,
+                child: ListView(
+                  controller: ScrollController(),
+                  children: _populateNotifications(),
+                ),
+              ),
+            ],
+          )
+        : Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Align(
+                alignment: Alignment(0.0, 0.0),
+                child: Text(
+                  'No Notifications',
+                  style: AppTextStyle.bold(),
+                ),
+              ),
+            ),
+          );
   }
 }
