@@ -11,26 +11,39 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _householdIdController = TextEditingController();
-  String? _selectedDietaryRequirement;
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _householdIdController = TextEditingController();
+  final _dietaryController = TextEditingController();
 
-  final List<String> _dietaryRequirements = [
-    'Fish',
-    'Eggs',
-    'Dairy',
-    'Nuts',
-    'Gluten',
-    'Soy',
-    'None'
-  ];
+  List<String> _dietaryRequirements = [];
 
   void _generateHouseholdId() {
-    final random = Random();
-    final householdId = random.nextInt(999); 
-    _householdIdController.text = householdId.toString();
+    _householdIdController.text = Random().nextInt(999).toString();
+  }
+
+  void _addDietaryRequirement() {
+    String input = _dietaryController.text.trim();
+    if (input.isNotEmpty && !_dietaryRequirements.contains(input)) {
+      setState(() {
+        _dietaryRequirements.add(input);
+        _dietaryController.clear();
+      });
+    }
+  }
+
+  void _removeDietaryRequirement(String item) {
+    setState(() {
+      _dietaryRequirements.remove(item);
+    });
+  }
+
+  void _registerUser() {
+    String dietarySummary = _dietaryRequirements.join(', ');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Registered with dietary needs: $dietarySummary')),
+    );
   }
 
   @override
@@ -39,90 +52,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: Constants.customAppBar(context: context, title: 'Register'),
       body: Container(
         color: AppTheme.primary80,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Center(
           child: Container(
-            width: 400, 
-            height: 600, 
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-
-            ),
-            padding: const EdgeInsets.all(16.0),
+            width: 400,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset('assets/ExpiryLogo.png', height: 150), 
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset('assets/ExpiryLogo.png', height: 150),
                   const SizedBox(height: 16),
-                  TextField(
-                    controller: _firstNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'First Name',
-                      border: OutlineInputBorder(),
-                    ),
+                  _buildTextField(_firstNameController, 'First Name'),
+                  _buildTextField(_lastNameController, 'Last Name'),
+                  _buildTextField(_emailController, 'Email'),
+                  _buildTextField(_householdIdController, 'Household ID', readOnly: true),
+                  
+                  const SizedBox(height: 16),
+                  const Text('Dietary Requirements:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Row(
+                    children: [
+                      Expanded(child: _buildTextField(_dietaryController, 'Add dietary requirement')),
+                      IconButton(
+                        icon: const Icon(Icons.add, color: Colors.green),
+                        onPressed: _addDietaryRequirement,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _lastNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Last Name',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _householdIdController,
-                    decoration: const InputDecoration(
-                      labelText: 'Household ID',
-                      border: OutlineInputBorder(),
-                    ),
-                    readOnly: true,
-                  ),
-                  const SizedBox(height: 16),
-                  DropdownButtonFormField<String>(
-                    value: _selectedDietaryRequirement,
-                    decoration: const InputDecoration(
-                      labelText: 'Dietary Requirements',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: _dietaryRequirements.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+
+                  Wrap(
+                    spacing: 8.0,
+                    children: _dietaryRequirements.map((item) {
+                      return Chip(
+                        label: Text(item),
+                        deleteIcon: const Icon(Icons.close),
+                        onDeleted: () => _removeDietaryRequirement(item),
                       );
                     }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedDietaryRequirement = newValue;
-                      });
-                    },
                   ),
-                  const SizedBox(height: 32),
+
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Registration successful')),
-                          );
-                        },
-                        child: const Text('Register'),
-                      ),
-                      ElevatedButton(
-                        onPressed: _generateHouseholdId,
-                        child: const Text('Create Household ID'),
-                      ),
+                      ElevatedButton(onPressed: _registerUser, child: const Text('Register')),
+                      ElevatedButton(onPressed: _generateHouseholdId, child: const Text('Create Household ID')),
                     ],
                   ),
                 ],
@@ -130,6 +105,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, {bool readOnly = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(labelText: label, border: OutlineInputBorder()),
+        readOnly: readOnly,
       ),
     );
   }
