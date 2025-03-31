@@ -11,6 +11,41 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
+List<String> dietaryRequirements = [
+    'Avocados',
+    'Bananas',
+    'Celery',
+    'Chocolate',
+    'Citrus Fruits',
+    'Coconut',
+    'Coffee',
+    'Corn',
+    'Eggs',
+    'Fish',
+    'Food Additives',
+    'Gelatin',
+    'Kiwi',
+    'Legumes',
+    'Lupin',
+    'Meat Allergies',
+    'Milk',
+    'Mollusks',
+    'Mustard',
+    'None',
+    'Nuts',
+    'Oats',
+    'Peanuts',
+    'Potatoes',
+    'Rice',
+    'Sesame',
+    'Shellfish',
+    'Soy',
+    'Strawberries',
+    'Tomatoes',
+    'Tree Nuts',
+    'Wheat'
+  ];
+
 class _ProfileScreenState extends State<ProfileScreen> {
   late final List<TextEditingController> _controllers;
   bool _isEditing = false;
@@ -83,25 +118,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildDietarySection(User user) {
-    return Column(
-      children: [
+  String? selectedRequirement; // Holds the currently selected dietary requirement
+
+  return Column(
+    children: [
+      const SizedBox(height: 16),
+      const Text(
+        'Dietary Requirements:',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 8),
+      Wrap(
+        spacing: 8.0,
+        runSpacing: 4.0,
+        children: user.dietaryRequirements.map((requirement) => Chip(
+          label: Text(requirement),
+          backgroundColor: AppTheme.primary80.withOpacity(0.2),
+          deleteIcon: const Icon(Icons.close),
+          onDeleted: _isEditing
+              ? () => _removeDietaryRequirement(user, requirement)
+              : null,
+        )).toList(),
+      ),
+      if (_isEditing) ...[
         const SizedBox(height: 16),
-        const Text('Dietary Requirements:', 
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: user.dietaryRequirements.map((requirement) => Chip(
-            label: Text(requirement),
-            backgroundColor: AppTheme.primary80.withOpacity(0.2),
-            deleteIcon: const Icon(Icons.close),
-            onDeleted: _isEditing ? () => _removeDietaryRequirement(user, requirement) : null,
-          )).toList(),
+        Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                value: selectedRequirement,
+                items: dietaryRequirements
+                    .where((requirement) =>
+                        !user.dietaryRequirements.contains(requirement))
+                    .map((requirement) => DropdownMenuItem(
+                          value: requirement,
+                          child: Text(requirement),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedRequirement = value; // Update selected requirement
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Select Dietary Requirement',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: selectedRequirement != null
+                  ? () {
+                      _addDietaryRequirement(user, selectedRequirement!);
+                      setState(() {
+                        selectedRequirement = null; // Reset the dropdown
+                      });
+                    }
+                  : null, // Disable button if no requirement is selected
+              child: const Text('Add'),
+            ),
+          ],
         ),
       ],
-    );
-  }
+    ],
+  );
+}
 
   void _removeDietaryRequirement(User user, String requirement) {
     setState(() {
@@ -111,6 +193,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     });
   }
+  
+  void _addDietaryRequirement(User user, String requirement) {
+  setState(() {
+    if (dietaryRequirements.contains(requirement) &&
+        !user.dietaryRequirements.contains(requirement)) {
+      user.dietaryRequirements.add(requirement);
+      Provider.of<UserProvider>(context, listen: false).setUser(
+        user.copyWith(dietaryRequirements: List.from(user.dietaryRequirements)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid or duplicate dietary requirement')),
+      );
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
