@@ -23,7 +23,7 @@ class RecipeManager {
     final url = Uri.https('api.api-ninjas.com', '/v1/recipe', {'query': '$query'});
     print('URL: $url');
 
-    final response = await get(url, headers: {'X-Api-Key': 'd0f8a7SbXICIh8hFk8Znbw==sDU1CMcTio7OGpwy'});
+    final response = await get(url, headers: {'X-Api-Key': ''});
     print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
