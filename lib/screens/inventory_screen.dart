@@ -1,10 +1,36 @@
 import 'package:expiry_eats/styles.dart';
+import 'package:expiry_eats/widgets/add_item_dialogue.dart';
 import 'package:flutter/foundation.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:expiry_eats/managers/inventory_manager.dart';
 import 'package:expiry_eats/widgets/inventory_item.dart';
+
+
+
+
+enum FoodCatogories {
+
+  carbohydrates,
+  dairy,
+  fruits,
+  protein,
+  sweetsAndFats,
+  vegetables,
+  miscellaneous;
+
+  String get displayName {
+    switch (this) {
+      case FoodCatogories.sweetsAndFats:
+      return 'Sweets & Fats';
+      default:
+      return name[0].toUpperCase() + name.substring(1);
+    }
+  }
+
+}
+
 
 
 class InventoryScreen extends StatefulWidget {
@@ -50,10 +76,12 @@ class InventoryScreenState extends State<InventoryScreen> {
         Item(name: 'Bananas', category: 'Fruits', imgSrc: 'assets/testing_image.jpg'),
         Item(name: 'Carrots', category: 'Vegetables', imgSrc: 'assets/testing_image.jpg'),
         Item(name: 'Milk', category: 'Dairy', imgSrc: 'assets/testing_image.jpg'),
-        Item(name: 'Bread', category: 'Carbohydrates', imgSrc: 'assets/testing_image.jpg')
+        Item(name: 'Bread', category: 'Carbohydrates', imgSrc: 'assets/testing_image.jpg'),
+        Item(name: 'Cake', category: 'Sweets and Fats', imgSrc: 'assets/testing_image.jpg')
       ]);
     });
   }
+
 
 
   @override
@@ -124,32 +152,24 @@ class InventoryScreenState extends State<InventoryScreen> {
         backgroundColor: AppTheme.primary40,
         foregroundColor: AppTheme.surface,
         hoverColor: AppTheme.primary80,
-        onPressed: () {
-          setState(() {
-            final newImagePath = 'assets/testing_image.jpg';
-            final newItemName = 'Item ${_groupedDisplayItems.values.fold(0, (sum, items) => sum + items.length) + 1}';
-            final newCategory = 'Fruits';
-
-            if (_groupedDisplayItems.containsKey(newCategory)) {
-              _groupedDisplayItems[newCategory]!.add(
-                Item(
-                  name: newItemName,
-                  category: newCategory,
-                  imgSrc: newImagePath,
-                ));
-            } else {
-              _groupedDisplayItems[newCategory] = [
-                Item(
-                  name: newItemName,
-                  category: newCategory,
-                  imgSrc: newImagePath,
-                )
-              ];
-            }
-          });
-        },
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => AddItemDialogue(
+            onItemAdded: (newItem) {
+              setState(() {
+                _allItems.add(newItem);
+                _displayItems = _allItems;
+                _groupedDisplayItems = _updateGroups();
+              });
+            },
+          ),
+        ),
         child: const Icon(Icons.add),
       ),
     );
   }
 }
+
+
+// Add Password into Register screen
+

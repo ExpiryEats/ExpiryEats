@@ -6,22 +6,12 @@ class InventoryItem extends StatelessWidget {
   final String imageAssetPath;
   final String itemName;
   final String category;
-   InventoryItem({
+  const InventoryItem({
     super.key,
     required this.imageAssetPath,
     required this.itemName,
     required this.category
   });
-
-  final List<String> foodCatogories = [
-    'Carbohydrates'
-    'Dairy'
-    'Fruits'
-    'Protein'
-    'Sweets and Fats'
-    'Vegetables'
-    'Miscellaneous'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +36,7 @@ class InventoryItem extends StatelessWidget {
                 children: [
                   // Image container
                   SizedBox(
-                    width: 300,
+                    width: MediaQuery.of(context).size.width * 0.25,
                     height: MediaQuery.of(context).size.height,
                     child: Image.asset(
                       imageAssetPath,
@@ -68,11 +58,6 @@ class InventoryItem extends StatelessWidget {
                         Text(
                           category,
                           style: AppTextStyle.medium(),
-                        ),
-                        const SizedBox(height: 32), // Adds some spacing
-                        Text(
-                          'Description...', 
-                          style: AppTextStyle.small(),
                         ),
                       ],
                     ),
