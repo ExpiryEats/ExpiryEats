@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class RecipeItem extends StatelessWidget {
   final String imgSrc;
   final String name;
+  final String ingredients;
 
   const RecipeItem({
     super.key,
     required this.name,
-    required this.imgSrc
+    required this.imgSrc,
+    required this.ingredients
   });
 
   @override
@@ -28,9 +30,12 @@ class RecipeItem extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: Stack()// Image.network(imgSrc),
+                  width: 200,
+                  height: MediaQuery.of(context).size.height,
+                  child: Image.asset(
+                    imgSrc,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.0),
@@ -42,7 +47,7 @@ class RecipeItem extends StatelessWidget {
                         style: AppTextStyle.bold()
                       ),
                       Text(
-                        "Items",
+                        ingredients,
                         style: AppTextStyle.small()
                       ),
                     ],
