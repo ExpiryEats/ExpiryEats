@@ -1,6 +1,7 @@
 import 'package:expiry_eats/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
+import 'package:expiry_eats/screens/settings.dart';
 
 class Constants {
   static AppBar customAppBar({required BuildContext context, String? title}) =>
@@ -21,10 +22,16 @@ class Constants {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfileScreen()),
+                    builder: (context) => ProfileScreen(),
+                  ),
                 );
               } else if (value == "Settings") {
-                // Not Functional Yet
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsScreen(), // Navigate to Settings
+                  ),
+                );
               } else if (value == "Logout") {
                 // Not Functional Yet
               }
