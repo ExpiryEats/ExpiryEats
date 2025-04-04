@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 
 
@@ -22,7 +23,25 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
   final _formKey = GlobalKey <FormState>();
   final _nameController = TextEditingController();
   File? _selectedImage;
+  DateTime? _selectedExpiryDate;
+  final TextEditingController _dateController = TextEditingController();
   FoodCatogories _selectedCategory = FoodCatogories.fruits;
+
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100)
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedExpiryDate = picked;
+        _dateController.text = DateFormat ('yyyy/MM/dd').format(picked);
+      });
+    }
+  }
 
 
   Future<void> _pickImage()  async {
@@ -40,11 +59,12 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
 
 
   void _submit() {
-    if (_formKey.currentState! .validate()) {
+    if (_formKey.currentState! .validate() && _selectedExpiryDate != null) {
       final newItem = Item(
         name: _nameController.text,
         category: _selectedCategory.displayName,
-        imgSrc: _selectedImage?.path?? 'assets/image.png'
+        imgSrc: _selectedImage?.path?? 'assets/image.png',
+        expiryDate: _selectedExpiryDate!,
       );
       widget.onItemAdded(newItem);
       Navigator.pop(context);
@@ -125,6 +145,32 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                   }
                 },
               ),
+
+              const SizedBox(height: 16),
+
+              //Expiry Date
+              TextFormField(
+                controller: _dateController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: 'Expiry Date',
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    onPressed: _selectDate,
+                    icon: Icon(Icons.calendar_today)
+                    ),
+                ),
+
+                validator: (value) {
+                  if (_selectedExpiryDate == null) {
+                    return 'Please enter a valid date';
+                  }
+                  return null;
+                },
+                onTap: _selectDate,
+              ),
+
+
             ],
           ),
         ),

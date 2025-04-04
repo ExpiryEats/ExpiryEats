@@ -30,6 +30,7 @@ environment:
 dependencies:
   image_picker: ^0.8.7+1  # For image selection
   path_provider: ^2.1.1  # For file handling
+  intl: ^0.18.1 # For date formatting
   flutter:
     sdk: flutter
 

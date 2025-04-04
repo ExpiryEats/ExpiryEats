@@ -18,12 +18,15 @@ enum FoodCatogories {
   protein,
   sweetsAndFats,
   vegetables,
-  miscellaneous;
+  miscellaneous,
+  prePreparedMeals;
 
   String get displayName {
     switch (this) {
       case FoodCatogories.sweetsAndFats:
       return 'Sweets & Fats';
+      case FoodCatogories.prePreparedMeals:
+      return 'Pre-Prepared Meal';
       default:
       return name[0].toUpperCase() + name.substring(1);
     }
@@ -72,12 +75,12 @@ class InventoryScreenState extends State<InventoryScreen> {
     // Test items for list
     setState(() {
       _allItems.addAll([
-        Item(name: 'Apples', category: 'Fruits', imgSrc: 'assets/testing_image.jpg'),
-        Item(name: 'Bananas', category: 'Fruits', imgSrc: 'assets/testing_image.jpg'),
-        Item(name: 'Carrots', category: 'Vegetables', imgSrc: 'assets/testing_image.jpg'),
-        Item(name: 'Milk', category: 'Dairy', imgSrc: 'assets/testing_image.jpg'),
-        Item(name: 'Bread', category: 'Carbohydrates', imgSrc: 'assets/testing_image.jpg'),
-        Item(name: 'Cake', category: 'Sweets and Fats', imgSrc: 'assets/testing_image.jpg')
+        Item(name: 'Apples', category: 'Fruits', imgSrc: 'assets/testing_image.jpg',expiryDate: DateTime(2025, 3, 20)),
+        Item(name: 'Bananas', category: 'Fruits', imgSrc: 'assets/testing_image.jpg',expiryDate: DateTime(2025, 3, 20)),
+        Item(name: 'Carrots', category: 'Vegetables', imgSrc: 'assets/testing_image.jpg',expiryDate: DateTime(2025, 3, 20)),
+        Item(name: 'Milk', category: 'Dairy', imgSrc: 'assets/testing_image.jpg',expiryDate: DateTime(2025, 3, 20)),
+        Item(name: 'Bread', category: 'Carbohydrates', imgSrc: 'assets/testing_image.jpg',expiryDate: DateTime(2025, 3, 20)),
+        Item(name: 'Cake', category: 'Sweets and Fats', imgSrc: 'assets/testing_image.jpg',expiryDate: DateTime(2025, 3, 20))
       ]);
     });
   }
