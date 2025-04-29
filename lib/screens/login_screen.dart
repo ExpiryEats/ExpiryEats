@@ -1,11 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:expiry_eats/managers/database_manager.dart';
 import 'home_screen.dart';
 import 'register_screen.dart';
-
-import 'package:expiry_eats/managers/database_manager.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,16 +14,14 @@ class LoginScreen extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
-      return null;
+      return;
     }
 
     final authManager = AuthManager();
-
     final response = await authManager.logIn(email, password);
 
     if (response?.user != null) {
       final cacheProvider = Provider.of<CacheProvider>(context, listen: false);
-
       await cacheProvider.fetchUserFromDatabase();
 
       Navigator.pushReplacement(
@@ -38,38 +35,62 @@ class LoginScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildLoginCard(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
-    return Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        width: 700,
-        height: 700,
+    return Scaffold(
+      body: Container(
+        color: AppTheme.primary80,
         padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/ExpiryLogo.png', height: 160),
-            const Text('Expiry Eats',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 32),
-            _buildInputField('Email', emailController),
-            const SizedBox(height: 16),
-            _buildInputField('Password', passwordController, isPassword: true),
-            const SizedBox(height: 32),
-            _buildActionButton(
-                'Login',
-                () => _handleLogin(
-                    context, emailController.text, passwordController.text)),
-            const SizedBox(height: 16),
-            _buildActionButton(
-                'Register',
-                () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const RegisterScreen()))),
-          ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset('assets/ExpiryLogo.png', height: 160),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Expiry Eats',
+                        style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 32),
+                      _buildInputField('Email', emailController),
+                      const SizedBox(height: 16),
+                      _buildInputField('Password', passwordController, isPassword: true),
+                      const SizedBox(height: 32),
+                      _buildActionButton(
+                        'Login',
+                        () => _handleLogin(
+                          context,
+                          emailController.text,
+                          passwordController.text,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _buildActionButton(
+                        'Register',
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -91,20 +112,13 @@ class LoginScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
+        backgroundColor: AppTheme.surface,
+        foregroundColor: Colors.deepPurple,
         minimumSize: const Size(double.infinity, 50),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        elevation: 2,
       ),
       child: Text(text),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: AppTheme.primary80,
-        padding: const EdgeInsets.all(16),
-        child: Center(child: _buildLoginCard(context)),
-      ),
     );
   }
 }
