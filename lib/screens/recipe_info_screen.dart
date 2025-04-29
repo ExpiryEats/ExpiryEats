@@ -46,7 +46,7 @@ class RecipeInfoScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
+                  Image.network(
                     recipeInfo['imgSrc'],
                     width: 200,
                     height: 200,
