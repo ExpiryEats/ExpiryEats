@@ -3,7 +3,7 @@ import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/recipe.dart';
 import 'package:expiry_eats/managers/recipe_manager.dart';
-import 'package:expiry_eats/widgets/recipe_item.dart';
+import 'package:expiry_eats/screens/find_recipe_screen.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 
 class RecipeScreen extends StatefulWidget {
@@ -14,22 +14,15 @@ class RecipeScreen extends StatefulWidget {
 }
 
 class RecipeScreenState extends State<RecipeScreen> {
+  final RecipeManager manager = RecipeManager();
+  late List<Recipe> _displayRecipes;
+
   final List<Recipe> _allRecipes = [
     Recipe(name: "Test Recipe", imgSrc: "assets/testing_image.jpg", ingredients: ['bacon', 'pasta', 'tomato']),
     Recipe(name: "Omelette", imgSrc: "assets/testing_image.jpg", ingredients: ['egg', 'cheese', 'spinach']),
     Recipe(name: "Lasagna", imgSrc: "assets/testing_image.jpg", ingredients: ['pasta', 'beef', 'cheese']),
     Recipe(name: "Mashed Potatoes", imgSrc: "assets/testing_image.jpg", ingredients: ['potato', 'chicken', 'herbs']),
   ];
-
-  late List<Recipe> _displayRecipes;
-
-  _populateRecipes(BuildContext context, double width) {
-    List<Widget> output = [];
-    for (Recipe recipe in _displayRecipes) {
-      output.add(RecipeItem(name: recipe.name, imgSrc: recipe.imgSrc, ingredients: recipe.formatIngredients(),));
-    }
-    return output;
-  }
 
   @override
   void initState() {
@@ -52,7 +45,7 @@ class RecipeScreenState extends State<RecipeScreen> {
             padding: EdgeInsets.all(8.0),
             child: SearchBar(
               leading: const Icon(Icons.search),
-              hintText: 'Search Recipes',
+              hintText: 'Search Saved Recipes',
               onChanged: (query) { setState(() => _displayRecipes = RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes)); },
             ),
           ),
@@ -62,7 +55,7 @@ class RecipeScreenState extends State<RecipeScreen> {
               gradientFractionOnEnd: 0.2,
               child: ListView(
                 controller: ScrollController(),
-                children: _populateRecipes(context, MediaQuery.sizeOf(context).width)
+                children: manager.populateRecipes(context, _displayRecipes, MediaQuery.sizeOf(context).width)
               ),
             ),
           ),
@@ -83,8 +76,10 @@ class RecipeScreenState extends State<RecipeScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          RecipeManager manager = RecipeManager();
-          manager.getRecipes('chicken');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FindRecipeScreen())
+          );
         },
         icon: Icon(Icons.add),
         label: Text('Find New Recipes'),
