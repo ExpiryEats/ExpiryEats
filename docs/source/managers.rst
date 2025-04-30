@@ -37,8 +37,9 @@ Populate Recipes
 ----------------
 This function handles converting the internal definition of a function into a Widget for the UI.
 ``populateRecipes(BuildContext context, List<Recipe> displayRecipes)``
-* searchTerm - The string to search for.
-* allRecipes - A list of all the recipes to search from.
+
+* context - The BuildContext for the current screen.
+* displayRecipes - A list of all the recipes to convert to Widgets.
 
 .. autosummary::
    :toctree: generated
