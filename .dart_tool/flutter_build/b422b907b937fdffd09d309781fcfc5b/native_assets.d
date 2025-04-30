@@ -1,0 +1,1 @@
+ C:\\Users\\natew\\Documents\\Year\ 2\\PAPL\\ExpiryEats\\ExpiryEats\\.dart_tool\\flutter_build\\b422b907b937fdffd09d309781fcfc5b\\native_assets.yaml: 

@@ -1,0 +1,10 @@
+^C:\USERS\NATEW\DOCUMENTS\YEAR 2\PAPL\EXPIRYEATS\EXPIRYEATS\BUILD\WINDOWS\X64\CMAKEFILES\65EA9299F7B93A8EE5B8263ED3703E91\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SC:/Users/natew/Documents/Year 2/PAPL/ExpiryEats/ExpiryEats/windows" "-BC:/Users/natew/Documents/Year 2/PAPL/ExpiryEats/ExpiryEats/build/windows/x64" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/natew/Documents/Year 2/PAPL/ExpiryEats/ExpiryEats/build/windows/x64/expiry_eats.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
