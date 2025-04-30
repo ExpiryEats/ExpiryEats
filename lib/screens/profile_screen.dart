@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 
+// TODO: make functional with db
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
