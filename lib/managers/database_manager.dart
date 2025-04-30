@@ -30,44 +30,44 @@ class DatabaseService {
 class AuthManager {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<AuthResponse?> signUp(String email, String password, String firstName,
-      String lastName, List<int> selectedRestrictionIds) async {
-    try {
-      final response = await _supabase.auth.signUp(
-        email: email,
-        password: password,
-      );
+  Future<AuthResponse> signUp(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    List<int> selectedRestrictionIds,
+  ) async {
+    final response = await _supabase.auth.signUp(
+      email: email,
+      password: password,
+    );
 
-      final authId = response.user?.id;
+    final authId = response.user?.id;
 
-      if (authId != null) {
-        final insertResult = await _supabase
-            .from('person')
-            .insert({
-              'person_first_name': firstName,
-              'person_last_name': lastName,
-              'person_email': email,
-            })
-            .select()
-            .single();
+    if (authId != null) {
+      final insertResult = await _supabase
+          .from('person')
+          .insert({
+            'person_first_name': firstName,
+            'person_last_name': lastName,
+            'person_email': email,
+          })
+          .select()
+          .single();
 
-        final personId = insertResult['person_id'];
+      final personId = insertResult['person_id'];
 
-        final inserts = selectedRestrictionIds.map((id) {
-          return {
-            'person_id': personId,
-            'restriction_id': id,
-          };
-        }).toList();
+      final inserts = selectedRestrictionIds.map((id) {
+        return {
+          'person_id': personId,
+          'restriction_id': id,
+        };
+      }).toList();
 
-        await _supabase.from('person_dietary_restrictions').insert(inserts);
-      }
-
-      return response;
-    } catch (e) {
-      print('Sign-up error: $e');
-      return null;
+      await _supabase.from('person_dietary_restrictions').insert(inserts);
     }
+
+    return response;
   }
 
   Future<AuthResponse?> logIn(String email, String password) async {

@@ -26,18 +26,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<int> selectedRestrictionIds = [];
 
   void _handleRegister() async {
-    if (firstName.isEmpty ||
-        lastName.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
-      return;
-    }
+  if (firstName.isEmpty ||
+      lastName.isEmpty ||
+      email.isEmpty ||
+      password.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please fill all fields')),
+    );
+    return;
+  }
 
-    final authManager = AuthManager();
+  final authManager = AuthManager();
 
+  try {
     final response = await authManager.signUp(
       email,
       password,
@@ -46,9 +47,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       selectedRestrictionIds,
     );
 
-    if (response != null && response.user != null) {
+    if (response.user != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You have been registered successfully!')),
+        const SnackBar(
+          content: Text('You have been registered successfully!'),
+        ),
       );
       Navigator.pushReplacement(
         context,
@@ -59,7 +62,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const SnackBar(content: Text('Registration failed.')),
       );
     }
+  } catch (e) {
+    final message = e.toString().replaceFirst('Exception: ', '').trim();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message.isNotEmpty ? message : 'Registration failed.')),
+    );
   }
+}
 
   void _showDietaryRequirementsDialog() {
     showDialog(
