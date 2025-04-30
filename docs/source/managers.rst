@@ -1,7 +1,10 @@
-MANAGERS
+Managers
 ========
 
-- Recipe Manager
+.. _managers:
+.. _recipeManager:
+
+Recipe Manager
 ================
 
 Overview
