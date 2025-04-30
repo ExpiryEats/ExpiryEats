@@ -55,7 +55,7 @@ class RecipeScreenState extends State<RecipeScreen> {
               gradientFractionOnEnd: 0.2,
               child: ListView(
                 controller: ScrollController(),
-                children: manager.populateRecipes(context, _displayRecipes, MediaQuery.sizeOf(context).width)
+                children: manager.populateRecipes(context, _displayRecipes)
               ),
             ),
           ),

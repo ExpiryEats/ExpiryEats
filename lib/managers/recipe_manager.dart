@@ -21,7 +21,7 @@ class RecipeManager {
     return output;
   }
 
-  List<Widget> populateRecipes(BuildContext context, List<Recipe> displayRecipes, double width) {
+  List<Widget> populateRecipes(BuildContext context, List<Recipe> displayRecipes) {
     List<Widget> output = [];
     for (Recipe recipe in displayRecipes) {
       output.add(RecipeItem(name: recipe.name, imgSrc: recipe.imgSrc, ingredients: recipe.ingredients,));
