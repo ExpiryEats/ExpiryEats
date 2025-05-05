@@ -1,4 +1,4 @@
-Recipe Manager
+Inventory Manager
 ================
 
 .. _recipeManager:
