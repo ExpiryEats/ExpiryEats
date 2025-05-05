@@ -18,5 +18,5 @@ Contents
 .. toctree::
 
    usage
-   managers
-   api
+   recipe-manager
+   recipe-api
