@@ -20,3 +20,4 @@ Contents
    usage
    recipe-manager
    recipe-api
+   inventory-manager
