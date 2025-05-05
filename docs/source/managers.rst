@@ -11,7 +11,7 @@ The **Recipe Manager** handles filtering recipes, formatting UI elements and int
 Filtering Recipes
 -----------------
 
-To implement a functional search feature, the Recipe Manager has a filterRecipes function:
+To implement a functional search feature, the Recipe Manager has a filterRecipes function:\n
 ``List<Recipe> filterRecipes(String? searchTerm, List<Recipe> allRecipes) -> List<Recipe>``
 
 * searchTerm - The string to search for.
@@ -37,7 +37,7 @@ For example:
 
 Populate Recipes
 ----------------
-This function handles converting the internal definition of a recipe into a Widget for the UI.
+This function handles converting the internal definition of a recipe into a Widget for the UI.\n
 ``List<Widget> populateRecipes(BuildContext context, List<Recipe> displayRecipes)``
 
 * context - The BuildContext for the current screen.
@@ -60,7 +60,7 @@ For example:
 
 Format Items
 ------------
-This function takes each ingredient of a recipe and joins them together into a single string.
+This function takes each ingredient of a recipe and joins them together into a single string.\n
 ``String formatItems(List<String> ingredients)``
 
 * ingredients - A list of all the ingredients in a recipe.
@@ -80,7 +80,7 @@ For example:
 
 Capitalise Items
 ---------------
-This function takes each ingredient of a recipe and capitalises it.
+This function takes each ingredient of a recipe and capitalises it.\n
 ``List<String> capitaliseItems(List<String> ingredients)``
 
 * ingredients - A list of all the ingredients in a recipe.
