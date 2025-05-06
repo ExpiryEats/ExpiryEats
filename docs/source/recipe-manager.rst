@@ -105,4 +105,4 @@ For example:
 .. autosummary::
    :toctree: generated
 
-   lumache
+   ExpiryEats

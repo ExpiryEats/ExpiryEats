@@ -71,4 +71,4 @@ This is a helper function that finds information on each recipe given to it by t
 .. autosummary::
    :toctree: generated
 
-   lumache
+   ExpiryEats
