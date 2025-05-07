@@ -6,6 +6,8 @@ import 'package:expiry_eats/managers/database_manager.dart';
 import 'home_screen.dart';
 import 'register_screen.dart';
 
+// TODO: change the error register message
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
