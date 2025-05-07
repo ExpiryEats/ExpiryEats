@@ -29,10 +29,12 @@ class CacheProvider extends ChangeNotifier {
   void setReferenceData({
     List<Map<String, dynamic>>? categories,
     List<Map<String, dynamic>>? storageTypes,
+    List<Map<String, dynamic>>? dietaryRestrictionTypes,
   }) {
     _cache = _cache.copyWith(
       categories: categories,
       storageTypes: storageTypes,
+      dietaryRestrictionTypes: dietaryRestrictionTypes,
     );
     notifyListeners();
   }
@@ -87,9 +89,14 @@ class CacheProvider extends ChangeNotifier {
           .from('storage_type')
           .select('storage_type_id, type_name');
 
+      final dietaryRestrictionTypesResponse = await Supabase.instance.client
+          .from('dietary_restrictions')
+          .select('restriction_id, restriction_name');
+
       _cache = _cache.copyWith(
         categories: List<Map<String, dynamic>>.from(categoriesResponse),
         storageTypes: List<Map<String, dynamic>>.from(storageTypesResponse),
+        dietaryRestrictionTypes: List<Map<String, dynamic>>.from(dietaryRestrictionTypesResponse),
       );
 
       // Debug print
@@ -103,6 +110,12 @@ class CacheProvider extends ChangeNotifier {
       for (var storageType in _cache.storageTypes) {
         print(
             " - ID: ${storageType['storage_type_id']}  Name: ${storageType['type_name']}");
+      }
+
+      print("Dietary Restriction Types:");
+      for (var dietaryRestrictionType in _cache.dietaryRestrictionTypes) {
+        print(
+            " - ID: ${dietaryRestrictionType['restriction_id']}  Name: ${dietaryRestrictionType['restriction_name']}");
       }
 
       print("Reference data cached");

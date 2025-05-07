@@ -5,6 +5,9 @@ import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:intl/intl.dart';
 
+// TODO: add most recently added recipes and inventory
+// TODO: possibly add missing ingredients from saved recipes
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 

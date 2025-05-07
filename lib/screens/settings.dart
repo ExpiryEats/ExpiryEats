@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 
+// TODO: make functional with db
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 

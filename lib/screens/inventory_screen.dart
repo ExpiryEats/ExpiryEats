@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 
+// TODO: add images from unsplash api
+// TODO: add quantity
+
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
 
