@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'Citrus Fruits',
     'Coconut',
     'Coffee',
-    'Corn',
+    'Garlic',
     'Eggs',
     'Fish',
     'Food Additives',

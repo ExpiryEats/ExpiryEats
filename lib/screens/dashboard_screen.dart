@@ -29,15 +29,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> checkDatabase() async {
     try {
       final cache = Provider.of<CacheProvider>(context, listen: false).cache;
-      final response = await DatabaseService()
-          .getAllItems(cache.userId!); // dummy id to test if db responds
+      print('[Dashboard] userId: ${cache.userId}');
+
+      final response = await DatabaseService().getAllItems(cache.userId!);
+      print('[Dashboard] item count: ${response.length}');
+
       setState(() {
         status = response.isNotEmpty
             ? "Database Functional ✅"
             : "Database Not Functional ❌";
       });
     } catch (e) {
-      print(e);
+      print('[Dashboard] ERROR: $e');
       setState(() {
         status = "Database Not Functional ❌";
       });

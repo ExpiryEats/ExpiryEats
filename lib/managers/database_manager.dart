@@ -4,13 +4,22 @@ class DatabaseService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   Future<List<Map<String, dynamic>>> getAllItems(int personId) async {
-    final response = await _supabase
-        .from('item')
-        .select('*')
-        .eq('person_id', personId)
-        .order('item_name', ascending: true);
+    try {
+      print('[getAllItems] Fetching items for personId: $personId');
 
-    return List<Map<String, dynamic>>.from(response);
+      final response = await _supabase
+          .from('item')
+          .select('*')
+          .eq('person_id', personId)
+          .order('item_name', ascending: true);
+
+      print('[getAllItems] Response received: ${response.length} items');
+
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      print('[getAllItems] ERROR: $e');
+      return [];
+    }
   }
 
   Future<void> insertItem(Map<String, dynamic> itemData) async {

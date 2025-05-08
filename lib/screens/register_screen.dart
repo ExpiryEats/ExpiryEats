@@ -17,59 +17,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String password = '';
   final Map<String, int> dietaryRestrictions = {
     'Vegan': 1,
-    'Vegetarian': 2,
-    'Gluten-Free': 3,
-    'Nut-Free': 4,
-    'Dairy-Free': 5,
+    'Garlic': 2,
+    'Vegetarian': 3,
+    'Gluten-Free': 4,
+    'Nut-Free': 5,
+    'Dairy-Free': 6,
   };
 
   List<int> selectedRestrictionIds = [];
 
   void _handleRegister() async {
-  if (firstName.isEmpty ||
-      lastName.isEmpty ||
-      email.isEmpty ||
-      password.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please fill all fields')),
-    );
-    return;
-  }
-
-  final authManager = AuthManager();
-
-  try {
-    final response = await authManager.signUp(
-      email,
-      password,
-      firstName,
-      lastName,
-      selectedRestrictionIds,
-    );
-
-    if (response.user != null) {
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('You have been registered successfully!'),
-        ),
+        const SnackBar(content: Text('Please fill all fields')),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      return;
+    }
+
+    final authManager = AuthManager();
+
+    try {
+      final response = await authManager.signUp(
+        email,
+        password,
+        firstName,
+        lastName,
+        selectedRestrictionIds,
       );
-    } else {
+
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You have been registered successfully!'),
+          ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration failed.')),
+        );
+      }
+    } catch (e) {
+      final message = e.toString().replaceFirst('Exception: ', '').trim();
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registration failed.')),
+        SnackBar(
+            content:
+                Text(message.isNotEmpty ? message : 'Registration failed.')),
       );
     }
-  } catch (e) {
-    final message = e.toString().replaceFirst('Exception: ', '').trim();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message.isNotEmpty ? message : 'Registration failed.')),
-    );
   }
-}
 
   void _showDietaryRequirementsDialog() {
     showDialog(
@@ -114,7 +117,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildInput(String label, Function(String) onChanged, {bool obscure = false}) {
+  Widget _buildInput(String label, Function(String) onChanged,
+      {bool obscure = false}) {
     return TextField(
       onChanged: onChanged,
       obscureText: obscure,
@@ -166,9 +170,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 16),
                     _buildInput('Email', (val) => email = val),
                     const SizedBox(height: 16),
-                    _buildInput('Password', (val) => password = val, obscure: true),
+                    _buildInput('Password', (val) => password = val,
+                        obscure: true),
                     const SizedBox(height: 16),
-                    _buildRoundedButton('Select Dietary Requirements', _showDietaryRequirementsDialog),
+                    _buildRoundedButton('Select Dietary Requirements',
+                        _showDietaryRequirementsDialog),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8.0,

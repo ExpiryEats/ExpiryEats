@@ -36,15 +36,15 @@ class CacheManager {
     List<Map<String, dynamic>>? dietaryRestrictionTypes,
   }) {
     return CacheManager(
-      userId: userId ?? this.userId,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      email: email ?? this.email,
-      householdId: householdId ?? this.householdId,
-      dietaryRequirements: dietaryRequirements ?? this.dietaryRequirements,
-      categories: categories ?? this.categories,
-      storageTypes: storageTypes ?? this.storageTypes,
-      dietaryRestrictionTypes: dietaryRestrictionTypes ?? this.dietaryRestrictionTypes
-    );
+        userId: userId ?? this.userId,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        email: email ?? this.email,
+        householdId: householdId ?? this.householdId,
+        dietaryRequirements: dietaryRequirements ?? this.dietaryRequirements,
+        categories: categories ?? this.categories,
+        storageTypes: storageTypes ?? this.storageTypes,
+        dietaryRestrictionTypes:
+            dietaryRestrictionTypes ?? this.dietaryRestrictionTypes);
   }
 }

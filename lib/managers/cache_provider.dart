@@ -96,7 +96,8 @@ class CacheProvider extends ChangeNotifier {
       _cache = _cache.copyWith(
         categories: List<Map<String, dynamic>>.from(categoriesResponse),
         storageTypes: List<Map<String, dynamic>>.from(storageTypesResponse),
-        dietaryRestrictionTypes: List<Map<String, dynamic>>.from(dietaryRestrictionTypesResponse),
+        dietaryRestrictionTypes:
+            List<Map<String, dynamic>>.from(dietaryRestrictionTypesResponse),
       );
 
       // Debug print

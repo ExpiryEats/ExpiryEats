@@ -1,10 +1,12 @@
 import 'package:expiry_eats/colors.dart';
+import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/recipe.dart';
 import 'package:expiry_eats/managers/recipe_manager.dart';
 import 'package:expiry_eats/widgets/recipe_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
+import 'package:provider/provider.dart';
 
 class FindRecipeScreen extends StatefulWidget {
   const FindRecipeScreen({super.key});
@@ -40,7 +42,15 @@ class FindRecipeScreenState extends State<FindRecipeScreen> {
               leading: const Icon(Icons.search),
               hintText: 'Search New Recipes',
               onSubmitted: (query) async {
-                _displayRecipes = await manager.getRecipesByIngredient(query);
+                final cache =
+                    Provider.of<CacheProvider>(context, listen: false).cache;
+
+                List<Recipe> results =
+                    await manager.getRecipesByIngredient(query);
+
+                _displayRecipes = manager.filterRecipesByDiet(
+                    results, cache.dietaryRequirements);
+
                 setState(() {});
               },
             ),
