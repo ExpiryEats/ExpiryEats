@@ -4,8 +4,6 @@ import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-// TODO: make functional with db
-
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
