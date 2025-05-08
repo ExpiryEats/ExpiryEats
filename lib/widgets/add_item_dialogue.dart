@@ -44,6 +44,16 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
     }
   }
 
+  String formatItemName(String name) {
+    return name
+        .trim()
+        .split(' ')
+        .map((word) => word.isNotEmpty
+            ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
+            : '')
+        .join(' ');
+  }
+
   void _submit() {
     final cache = Provider.of<CacheProvider>(context, listen: false);
 
@@ -56,7 +66,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
         personId: cache.cache.userId!,
         categoryId: _selectedCategoryId!,
         storageTypeId: _selectedStorageTypeId!,
-        itemName: _nameController.text,
+        itemName: formatItemName(_nameController.text),
         expirationDate: _selectedExpiryDate!,
         dateAdded: DateTime.now(),
       );
@@ -88,8 +98,9 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                   labelText: 'Item Name',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Please enter an item name' : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter an item name'
+                    : null,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<int>(
@@ -104,8 +115,10 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                     child: Text(category['category_name']),
                   );
                 }).toList(),
-                onChanged: (value) => setState(() => _selectedCategoryId = value),
-                validator: (value) => value == null ? 'Please select a category' : null,
+                onChanged: (value) =>
+                    setState(() => _selectedCategoryId = value),
+                validator: (value) =>
+                    value == null ? 'Please select a category' : null,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<int>(
@@ -120,8 +133,10 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                     child: Text(type['type_name']),
                   );
                 }).toList(),
-                onChanged: (value) => setState(() => _selectedStorageTypeId = value),
-                validator: (value) => value == null ? 'Please select storage type' : null,
+                onChanged: (value) =>
+                    setState(() => _selectedStorageTypeId = value),
+                validator: (value) =>
+                    value == null ? 'Please select storage type' : null,
               ),
               const SizedBox(height: 16),
               GestureDetector(
