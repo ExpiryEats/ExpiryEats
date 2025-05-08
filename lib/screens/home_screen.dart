@@ -21,7 +21,7 @@ class HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     const DashboardScreen(),
     const InventoryScreen(),
-    const RecipeScreen(),
+    const RecipeScreen(), //test
     const NotificationScreen(),
   ];
 
@@ -45,7 +45,6 @@ class HomeScreenState extends State<HomeScreen> {
   ];
 
   void onTapHandler(int index) {
-
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 750),
