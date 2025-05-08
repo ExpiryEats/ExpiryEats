@@ -154,8 +154,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
           ),
 
-          const Spacer(),
-
           const SizedBox(height: 24),
 
           const Text(
@@ -177,6 +175,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                   ),
           ),
+
+          Spacer(),
 
           Align(
             alignment: Alignment.bottomRight,
