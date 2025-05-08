@@ -15,6 +15,7 @@ class FindRecipeScreen extends StatefulWidget {
 class FindRecipeScreenState extends State<FindRecipeScreen> {
   final RecipeManager manager = RecipeManager();
   late List<Recipe> _displayRecipes;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -26,12 +27,18 @@ class FindRecipeScreenState extends State<FindRecipeScreen> {
   void dispose() {
     super.dispose();
   }
-  
+
+  Future<void> _searchRecipes(String query) async {
+    setState(() => _isLoading = true);
+    _displayRecipes = await manager.getRecipesByIngredient(query);
+    setState(() => _isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search for Recipes"),
+        title: const Text("Search for Recipes"),
         backgroundColor: AppTheme.primary40,
         foregroundColor: AppTheme.surface,
       ),
@@ -39,38 +46,41 @@ class FindRecipeScreenState extends State<FindRecipeScreen> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: SearchBar(
               leading: const Icon(Icons.search),
               hintText: 'Search New Recipes',
-              onSubmitted: (query) async {
-                RecipeManager manager = RecipeManager();
-                _displayRecipes = await manager.getRecipesByIngredient(query);
-                setState(() {});
-              },
+              onSubmitted: _searchRecipes,
             ),
           ),
-          _displayRecipes.isNotEmpty ? Expanded(
-            child: FadingEdgeScrollView.fromScrollView(
-              gradientFractionOnStart: 0.2,
-              gradientFractionOnEnd: 0.2,
-              child: ListView(
-                controller: ScrollController(),
-                children: manager.populateRecipes(context, _displayRecipes, MediaQuery.sizeOf(context).width)
+          if (_isLoading)
+            const Expanded(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (_displayRecipes.isNotEmpty)
+            Expanded(
+              child: FadingEdgeScrollView.fromScrollView(
+                gradientFractionOnStart: 0.2,
+                gradientFractionOnEnd: 0.2,
+                child: ListView(
+                  controller: ScrollController(),
+                  children: manager.populateRecipes(
+                    context,
+                    _displayRecipes,
+                    MediaQuery.sizeOf(context).width,
+                  ),
+                ),
               ),
-            ),
-          ) : Align(
-            alignment: Alignment.center,
-            child: Expanded(
-              child: Align(
-                alignment: Alignment(0.0, 0.0),
+            )
+          else
+            Expanded(
+              child: Center(
                 child: Text(
                   'Search For Recipes',
                   style: AppTextStyle.bold(),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
