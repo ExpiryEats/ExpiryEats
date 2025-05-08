@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/styles.dart';
 import 'package:intl/intl.dart';
+import 'package:expiry_eats/managers/database_manager.dart';
+import 'package:expiry_eats/screens/home_screen.dart';
 
 // TODO: add editing inventory items
 
 class IteminfoScreen extends StatelessWidget {
+  final int itemId;
   final String itemName;
   final String category;
   final String itemImage;
@@ -13,12 +16,57 @@ class IteminfoScreen extends StatelessWidget {
 
   const IteminfoScreen({
     super.key,
+    required this.itemId,
     required this.itemName,
     required this.category,
     required this.itemImage,
     required this.itemDateAdded,
     required this.itemExpiryDate,
   });
+
+Future<void> _confirmDeleteItem(BuildContext context, String itemName) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Delete Item"),
+        content: Text("Are you sure you want to delete \"$itemName\" from your inventory?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const AlertDialog(
+                  content: SizedBox(
+                    height: 80,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+              );
+
+              await DatabaseService().deleteItem(itemId);
+              debugPrint("Item deleted: $itemId");
+
+              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const HomeScreen(initialTabIndex: 1)),
+              );
+            },
+            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +75,10 @@ class IteminfoScreen extends StatelessWidget {
         title: Text(itemName),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(Icons.delete_outline),
             onPressed: () {
-              debugPrint('Edit $itemName');
+              debugPrint('Delete $itemName');
+              _confirmDeleteItem(context, itemName);
             },
           )
         ],

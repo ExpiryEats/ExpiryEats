@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/styles.dart'; 
 
 class InventoryItem extends StatelessWidget {
+  final int itemId;
   final String imageAssetPath;
   final String itemName;
   final String category;
@@ -11,6 +12,7 @@ class InventoryItem extends StatelessWidget {
 
   const InventoryItem({
     super.key,
+    required this.itemId,
     required this.imageAssetPath,
     required this.itemName,
     required this.category,
@@ -32,6 +34,7 @@ class InventoryItem extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => IteminfoScreen(
+                    itemId: itemId,
                     itemName: itemName,
                     category: category,
                     itemImage: imageAssetPath,

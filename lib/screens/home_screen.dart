@@ -7,16 +7,24 @@ import 'package:expiry_eats/screens/inventory_screen.dart';
 import 'package:expiry_eats/screens/notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialTabIndex;
+
+  const HomeScreen({super.key, this.initialTabIndex = 0});
 
   @override
   HomeScreenState createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  // Page Controller
-  int _selectedIndex = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  late int _selectedIndex;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialTabIndex;
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
 
   final List<Widget> _pages = [
     const DashboardScreen(),

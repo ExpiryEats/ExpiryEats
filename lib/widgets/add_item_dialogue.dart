@@ -54,7 +54,6 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
         storageTypeId: _selectedStorageTypeId!,
         itemName: _nameController.text,
         expirationDate: _selectedExpiryDate!,
-        quantity: 1,
         dateAdded: DateTime.now(),
       );
 

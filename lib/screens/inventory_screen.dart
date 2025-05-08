@@ -9,7 +9,6 @@ import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 
 // TODO: add images from unsplash api
-// TODO: add quantity
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -125,7 +124,8 @@ class InventoryScreenState extends State<InventoryScreen> {
                       itemBuilder: (context, index) {
                         final item = items[index];
                         return InventoryItem(
-                          key: ValueKey(item.itemId ?? item.itemName),
+                          key: ValueKey(item.itemId),
+                          itemId: item.itemId!,
                           imageAssetPath: 'assets/testing_image.jpg',
                           itemName: item.itemName,
                           category: categoryName,

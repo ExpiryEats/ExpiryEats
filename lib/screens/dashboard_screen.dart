@@ -18,12 +18,14 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   String status = "Checking database connection...";
   List<Item> _expiringItems = [];
+  List<Item> _recentItems = [];
 
   @override
   void initState() {
     super.initState();
     checkDatabase();
     loadExpiringItems();
+    loadRecentItems();
   }
 
   Future<void> checkDatabase() async {
@@ -42,6 +44,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         status = "Database Not Functional ❌";
       });
     }
+  }
+
+  Future<void> loadRecentItems() async {
+    final cache = Provider.of<CacheProvider>(context, listen: false).cache;
+    if (cache.userId == null) return;
+
+    final allItems = await DatabaseService().getAllItems(cache.userId!);
+    final items = allItems.map((data) => Item.fromMap(data)).toList();
+
+    items.sort((a, b) => b.dateAdded.compareTo(a.dateAdded));
+
+    setState(() {
+      _recentItems = items.take(5).toList();
+    });
   }
 
   Future<void> loadExpiringItems() async {
@@ -140,6 +156,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           const Spacer(),
 
+          const SizedBox(height: 24),
+
+          const Text(
+            'Recently Added',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+
+          SizedBox(
+            height: 140,
+            child: _recentItems.isEmpty
+                ? const Center(child: Text('No recent items'))
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _recentItems.length,
+                    itemBuilder: (context, index) {
+                      final item = _recentItems[index];
+                      return _buildRecentCard(item.itemName, item.dateAdded);
+                    },
+                  ),
+          ),
+
           Align(
             alignment: Alignment.bottomRight,
             child: Text(
@@ -198,4 +236,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
+
+Widget _buildRecentCard(String name, DateTime addedDate) {
+  return Container(
+    width: 160,
+    margin: const EdgeInsets.only(right: 12),
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: const Color(0xFFE0E3D5)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Added: ${DateFormat('dd/MM/yyyy').format(addedDate)}',
+          style: const TextStyle(fontSize: 12, color: Colors.black54),
+        ),
+        const Spacer(),
+        const Text(
+          'Recently Added',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.green,
+          ),
+        ),
+      ],
+    ),
+  );
 }

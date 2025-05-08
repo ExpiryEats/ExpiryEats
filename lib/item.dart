@@ -5,7 +5,6 @@ class Item {
   final int storageTypeId;
   final String itemName;
   final DateTime expirationDate;
-  final int quantity;
   final DateTime dateAdded;
 
   Item({
@@ -15,7 +14,6 @@ class Item {
     required this.storageTypeId,
     required this.itemName,
     required this.expirationDate,
-    required this.quantity,
     required this.dateAdded,
   });
 
@@ -26,7 +24,6 @@ class Item {
       'storage_type_id': storageTypeId,
       'item_name': itemName,
       'expiration_date': expirationDate.toIso8601String(),
-      'quantity': quantity,
       'date_added': dateAdded.toIso8601String(),
     };
   }
@@ -39,7 +36,6 @@ class Item {
       storageTypeId: map['storage_type_id'] as int,
       itemName: map['item_name'] as String,
       expirationDate: DateTime.parse(map['expiration_date']),
-      quantity: map['quantity'] as int,
       dateAdded: DateTime.parse(map['date_added']),
     );
   }

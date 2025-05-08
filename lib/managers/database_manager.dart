@@ -17,6 +17,10 @@ class DatabaseService {
     await _supabase.from('item').insert(itemData);
   }
 
+  Future<void> deleteItem(int itemId) async {
+    await _supabase.from('item').delete().eq('item_id', itemId);
+  }
+
   Future<List<Map<String, dynamic>>> getPersonDietaryRestrictions(
       int personId) async {
     final response = await _supabase
