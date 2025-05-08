@@ -49,6 +49,10 @@ class RecipeManager {
   }
 
   Future<List<Recipe>> getRecipesByIngredient(String? query) async {
+    if (query == "") {
+      return [];
+    }
+
     final url = Uri.https(
         'themealdb.com', '/api/json/v1/1/filter.php', {'i': '$query'});
 
@@ -65,8 +69,13 @@ class RecipeManager {
     return [];
   }
 
-  Future<List<Recipe>> getRecipesById(List<dynamic> meals) async {
+  Future<List<Recipe>> getRecipesById(List<dynamic>? meals) async {
     List<Recipe> output = [];
+
+    if (meals == null) {
+      return [];
+    }
+
     for (final recipe in meals) {
       final url = Uri.https('themealdb.com', '/api/json/v1/1/lookup.php',
           {'i': recipe["idMeal"]!});
