@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
+import 'package:intl/intl.dart';
 
 class AddItemDialogue extends StatefulWidget {
   final Function(Item) onItemAdded;
@@ -15,6 +16,7 @@ class AddItemDialogue extends StatefulWidget {
 class _AddItemDialogueState extends State<AddItemDialogue> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _expiryController = TextEditingController();
 
   int? _selectedCategoryId;
   int? _selectedStorageTypeId;
@@ -23,6 +25,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
   @override
   void dispose() {
     _nameController.dispose();
+    _expiryController.dispose();
     super.dispose();
   }
 
@@ -36,6 +39,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
     if (picked != null) {
       setState(() {
         _selectedExpiryDate = picked;
+        _expiryController.text = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
   }
@@ -88,7 +92,6 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                     value == null || value.isEmpty ? 'Please enter an item name' : null,
               ),
               const SizedBox(height: 16),
-
               DropdownButtonFormField<int>(
                 value: _selectedCategoryId,
                 decoration: const InputDecoration(
@@ -105,7 +108,6 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                 validator: (value) => value == null ? 'Please select a category' : null,
               ),
               const SizedBox(height: 16),
-
               DropdownButtonFormField<int>(
                 value: _selectedStorageTypeId,
                 decoration: const InputDecoration(
@@ -122,18 +124,15 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
                 validator: (value) => value == null ? 'Please select storage type' : null,
               ),
               const SizedBox(height: 16),
-
               GestureDetector(
                 onTap: _pickExpiryDate,
                 child: AbsorbPointer(
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    controller: _expiryController,
+                    decoration: const InputDecoration(
                       labelText: 'Expiry Date',
-                      border: const OutlineInputBorder(),
-                      suffixIcon: const Icon(Icons.calendar_today),
-                      hintText: _selectedExpiryDate == null
-                          ? 'Pick Expiry Date'
-                          : _selectedExpiryDate!.toLocal().toString().split(' ')[0],
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.calendar_today),
                     ),
                     validator: (_) {
                       if (_selectedExpiryDate == null) {

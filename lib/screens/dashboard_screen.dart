@@ -16,34 +16,14 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String status = "Checking database connection...";
   List<Item> _expiringItems = [];
   List<Item> _recentItems = [];
 
   @override
   void initState() {
     super.initState();
-    checkDatabase();
     loadExpiringItems();
     loadRecentItems();
-  }
-
-  Future<void> checkDatabase() async {
-    try {
-      final cache = Provider.of<CacheProvider>(context, listen: false).cache;
-      final response = await DatabaseService()
-          .getAllItems(cache.userId!); // dummy id to test if db responds
-      setState(() {
-        status = response.isNotEmpty
-            ? "Database Functional ✅"
-            : "Database Not Functional ❌";
-      });
-    } catch (e) {
-      print(e);
-      setState(() {
-        status = "Database Not Functional ❌";
-      });
-    }
   }
 
   Future<void> loadRecentItems() async {
@@ -177,14 +157,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
 
           Spacer(),
-
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text(
-              status,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-            ),
-          ),
         ],
       ),
     );
