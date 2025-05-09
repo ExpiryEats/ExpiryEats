@@ -31,8 +31,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Analyse
+        run: flutter analyse
+
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
-        run: dart test
+        run: flutter test --coverage
