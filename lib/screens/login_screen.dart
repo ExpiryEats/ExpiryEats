@@ -23,17 +23,22 @@ class LoginScreen extends StatelessWidget {
     final response = await authManager.logIn(email, password);
 
     if (response?.user != null) {
-      final cacheProvider = Provider.of<CacheProvider>(context, listen: false);
-      await cacheProvider.fetchUserFromDatabase();
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      if (context.mounted) {
+        final cacheProvider = Provider.of<CacheProvider>(context, listen: false);
+        await cacheProvider.fetchUserFromDatabase();
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          );
+        }
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('We were unable to log you in.')),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('We were unable to log you in.')),
+        );
+      }
     }
   }
 

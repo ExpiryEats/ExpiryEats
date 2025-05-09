@@ -59,12 +59,14 @@ class Constants {
 
                 if (confirmed == true) {
                   await Supabase.instance.client.auth.signOut();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => const LoginScreen()),
-                    (route) => false,
-                  );
+                      (route) => false,
+                    );
+                  }
                 }
               }
             },
