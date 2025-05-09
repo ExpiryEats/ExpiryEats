@@ -5,8 +5,8 @@ import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:intl/intl.dart';
 
-// TODO: add most recently added recipes and inventory
-// TODO: possibly add missing ingredients from saved recipes
+// To do: add most recently added recipes and inventory
+// To do: possibly add missing ingredients from saved recipes
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -29,10 +29,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> checkDatabase() async {
     try {
       final cache = Provider.of<CacheProvider>(context, listen: false).cache;
-      print('[Dashboard] userId: ${cache.userId}');
+      debugPrint('[Dashboard] userId: ${cache.userId}');
 
       final response = await DatabaseService().getAllItems(cache.userId!);
-      print('[Dashboard] item count: ${response.length}');
+      debugPrint('[Dashboard] item count: ${response.length}');
 
       setState(() {
         status = response.isNotEmpty
@@ -40,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             : "Database Not Functional ❌";
       });
     } catch (e) {
-      print('[Dashboard] ERROR: $e');
+      debugPrint('[Dashboard] ERROR: $e');
       setState(() {
         status = "Database Not Functional ❌";
       });

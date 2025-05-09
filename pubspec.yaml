@@ -44,6 +44,7 @@ dependencies:
   supabase_flutter: ^2.8.4
   intl: ^0.20.2
   mobile_scanner: ^6.0.10
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:

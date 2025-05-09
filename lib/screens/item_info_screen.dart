@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/styles.dart';
 import 'package:intl/intl.dart';
 
-// TODO: add editing inventory items
+// To do: add editing inventory items
 
 class IteminfoScreen extends StatelessWidget {
   final String itemName;

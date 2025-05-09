@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/widgets/notification_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 
-// TODO: make functional with db
-// TODO: maybe link it with
+// To do: make functional with db
+// To do: maybe link it with
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});

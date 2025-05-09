@@ -5,7 +5,7 @@ import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -142,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10)
         ],
       ),
       child: SingleChildScrollView(
@@ -197,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: cacheProvider.cache.dietaryRequirements.map((req) {
             return Chip(
               label: Text(req),
-              backgroundColor: AppTheme.primary80.withOpacity(0.2),
+              backgroundColor: AppTheme.primary80.withValues(alpha: 0.2),
               deleteIcon: const Icon(Icons.close),
               onDeleted:
                   _isEditing ? () => _removeDietaryRequirement(req) : null,

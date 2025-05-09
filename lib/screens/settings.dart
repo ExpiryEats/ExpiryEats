@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
-import 'package:expiry_eats/managers/cache_provider.dart';
-import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();

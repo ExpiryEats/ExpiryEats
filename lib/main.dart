@@ -1,6 +1,5 @@
 import 'package:expiry_eats/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:expiry_eats/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

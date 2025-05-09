@@ -40,7 +40,7 @@ class CacheProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUserFromDatabase() async {
-    print("Fetching user data...");
+    debugPrint("Fetching user data...");
     final email = Supabase.instance.client.auth.currentUser?.email;
     if (email == null) return;
 
@@ -70,16 +70,16 @@ class CacheProvider extends ChangeNotifier {
         dietaryRequirements: personDietaryRequirements,
       );
 
-      print(
+      debugPrint(
           "User cached: ID=${_cache.userId}, Name=${_cache.firstName} ${_cache.lastName}, Email=${_cache.email}, Household=${_cache.householdId}, Dietary=${_cache.dietaryRequirements.join(', ')}");
       notifyListeners();
     } catch (e) {
-      print('Error fetching user data: $e');
+      debugPrint('Error fetching user data: $e');
     }
   }
 
   Future<void> fetchReferenceData() async {
-    print("Fetching reference data...");
+    debugPrint("Fetching reference data...");
     try {
       final categoriesResponse = await Supabase.instance.client
           .from('category')
@@ -101,28 +101,28 @@ class CacheProvider extends ChangeNotifier {
       );
 
       // Debug print
-      print("Categories:");
+      debugPrint("Categories:");
       for (var category in _cache.categories) {
-        print(
+        debugPrint(
             " - ID: ${category['category_id']}  Name: ${category['category_name']}");
       }
 
-      print("Storage Types:");
+      debugPrint("Storage Types:");
       for (var storageType in _cache.storageTypes) {
-        print(
+        debugPrint(
             " - ID: ${storageType['storage_type_id']}  Name: ${storageType['type_name']}");
       }
 
-      print("Dietary Restriction Types:");
+      debugPrint("Dietary Restriction Types:");
       for (var dietaryRestrictionType in _cache.dietaryRestrictionTypes) {
-        print(
+        debugPrint(
             " - ID: ${dietaryRestrictionType['restriction_id']}  Name: ${dietaryRestrictionType['restriction_name']}");
       }
 
-      print("Reference data cached");
+      debugPrint("Reference data cached");
       notifyListeners();
     } catch (e) {
-      print('Error fetching reference data: $e');
+      debugPrint('Error fetching reference data: $e');
     }
   }
 }

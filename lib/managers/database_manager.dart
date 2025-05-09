@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DatabaseService {
@@ -5,7 +6,7 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getAllItems(int personId) async {
     try {
-      print('[getAllItems] Fetching items for personId: $personId');
+      debugPrint('[getAllItems] Fetching items for personId: $personId');
 
       final response = await _supabase
           .from('item')
@@ -13,11 +14,11 @@ class DatabaseService {
           .eq('person_id', personId)
           .order('item_name', ascending: true);
 
-      print('[getAllItems] Response received: ${response.length} items');
+      debugPrint('[getAllItems] Response received: ${response.length} items');
 
       return List<Map<String, dynamic>>.from(response);
     } catch (e) {
-      print('[getAllItems] ERROR: $e');
+      debugPrint('[getAllItems] ERROR: $e');
       return [];
     }
   }
@@ -87,7 +88,7 @@ class AuthManager {
       );
       return response;
     } catch (e) {
-      print('Login error: $e');
+      debugPrint('Login error: $e');
       return null;
     }
   }

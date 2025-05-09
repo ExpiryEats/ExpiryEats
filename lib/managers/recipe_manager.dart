@@ -63,7 +63,7 @@ class RecipeManager {
         return getRecipesById(listResponse["meals"]);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e as String?);
     }
 
     return [];
@@ -98,7 +98,7 @@ class RecipeManager {
               ingredients: ingredients));
         }
       } catch (e) {
-        print(e);
+        debugPrint(e as String?);
       }
     }
     return output;
