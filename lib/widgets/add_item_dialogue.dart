@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/item.dart';
-import 'package:expiry_eats/screens/barcode_scanner_screen.dart';
+import 'package:expiry_eats/screens/barcode_scan_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
