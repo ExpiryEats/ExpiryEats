@@ -30,11 +30,13 @@ class CacheProvider extends ChangeNotifier {
     List<Map<String, dynamic>>? categories,
     List<Map<String, dynamic>>? storageTypes,
     List<Map<String, dynamic>>? dietaryRestrictionTypes,
+    List<Map<String, dynamic>>? notificationTypes,
   }) {
     _cache = _cache.copyWith(
       categories: categories,
       storageTypes: storageTypes,
       dietaryRestrictionTypes: dietaryRestrictionTypes,
+      notificationTypes: notificationTypes,
     );
     notifyListeners();
   }
@@ -93,29 +95,37 @@ class CacheProvider extends ChangeNotifier {
           .from('dietary_restrictions')
           .select('restriction_id, restriction_name');
 
+      final notificationTypesResponse = await Supabase.instance.client
+          .from('notification_type')
+          .select('type_id, type_name');
+
       _cache = _cache.copyWith(
         categories: List<Map<String, dynamic>>.from(categoriesResponse),
         storageTypes: List<Map<String, dynamic>>.from(storageTypesResponse),
-        dietaryRestrictionTypes: List<Map<String, dynamic>>.from(dietaryRestrictionTypesResponse),
+        dietaryRestrictionTypes:
+            List<Map<String, dynamic>>.from(dietaryRestrictionTypesResponse),
+        notificationTypes:
+            List<Map<String, dynamic>>.from(notificationTypesResponse),
       );
 
-      // Debug print
       print("Categories:");
       for (var category in _cache.categories) {
-        print(
-            " - ID: ${category['category_id']}  Name: ${category['category_name']}");
+        print(" - ID: ${category['category_id']}  Name: ${category['category_name']}");
       }
 
       print("Storage Types:");
       for (var storageType in _cache.storageTypes) {
-        print(
-            " - ID: ${storageType['storage_type_id']}  Name: ${storageType['type_name']}");
+        print(" - ID: ${storageType['storage_type_id']}  Name: ${storageType['type_name']}");
       }
 
       print("Dietary Restriction Types:");
       for (var dietaryRestrictionType in _cache.dietaryRestrictionTypes) {
-        print(
-            " - ID: ${dietaryRestrictionType['restriction_id']}  Name: ${dietaryRestrictionType['restriction_name']}");
+        print(" - ID: ${dietaryRestrictionType['restriction_id']}  Name: ${dietaryRestrictionType['restriction_name']}");
+      }
+
+      print("Notification Types:");
+      for (var notificationType in _cache.notificationTypes) {
+        print(" - ID: ${notificationType['type_id']}  Name: ${notificationType['type_name']}");
       }
 
       print("Reference data cached");

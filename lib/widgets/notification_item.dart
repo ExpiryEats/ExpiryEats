@@ -2,22 +2,22 @@ import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
 
 class NotificationItem extends StatelessWidget {
-  final String ingredientName;
-  final int daysToExpiry;
+  final String typeName;
+  final String message;
   final int daysSinceReceived;
   final VoidCallback onClose;
 
   const NotificationItem({
     super.key,
-    required this.ingredientName,
-    required this.daysToExpiry,
+    required this.typeName,
+    required this.message,
     required this.daysSinceReceived,
     required this.onClose,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool isExpired = daysToExpiry < 0;
+    final bool isExpired = message.toLowerCase().contains('expired');
     final Color cardColor = isExpired ? const Color(0xFFF45D53) : const Color(0xFFffdb4b);
 
     return Card(
@@ -43,12 +43,9 @@ class NotificationItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(ingredientName, style: AppTextStyle.bold()),
+                  Text(typeName, style: AppTextStyle.bold()),
                   const SizedBox(height: 2),
-                  Text(
-                    isExpired ? "Has expired" : "Expires in $daysToExpiry day${daysToExpiry == 1 ? '' : 's'}",
-                    style: AppTextStyle.small().copyWith(color: Colors.black87),
-                  ),
+                  Text(message, style: AppTextStyle.small().copyWith(color: Colors.black87)),
                 ],
               ),
             ),

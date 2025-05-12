@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:expiry_eats/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:intl/intl.dart';
-
-// TODO: add most recently added recipes and inventory
-// TODO: possibly add missing ingredients from saved recipes
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -70,7 +68,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Welcome Section
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -83,39 +80,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           const SizedBox(height: 12),
-
-          // Dietary Tag Section
           if (cache.dietaryRequirements.isNotEmpty)
             SizedBox(
-              height: 28,
+              height: 32,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: cache.dietaryRequirements.map((requirement) {
                   return Container(
+                    height: 32,
                     margin: const EdgeInsets.only(right: 8),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 231, 233, 224),
+                      color: AppTheme.primary80,
                       borderRadius: BorderRadius.circular(100),
                     ),
-                    child: Text(
-                      requirement,
-                      style: const TextStyle(fontSize: 13),
+                    child: Center(
+                      child: Text(
+                        requirement,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   );
                 }).toList(),
               ),
             ),
-
           const SizedBox(height: 24),
-
           const Text(
             'Expiring Soon',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-
           SizedBox(
             height: 140,
             child: _expiringItems.isEmpty
@@ -133,19 +131,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                   ),
           ),
-
           const SizedBox(height: 24),
-
           const Text(
             'Recently Added',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-
           SizedBox(
             height: 140,
             child: _recentItems.isEmpty
-                ? const Center(child: Text('No recent items'))
+                ? const Center(child: Text('No recently added items!'))
                 : ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _recentItems.length,
@@ -155,8 +150,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                   ),
           ),
-
-          Spacer(),
+          const Spacer(),
         ],
       ),
     );
@@ -164,11 +158,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildExpiringCard(String name, int daysLeft, DateTime expiryDate) {
     Color daysColor;
-
     if (daysLeft < 0) {
-      daysColor = Colors.red; // already expired
+      daysColor = Colors.red;
     } else if (daysLeft == 0) {
-      daysColor = Colors.orange; // expires today
+      daysColor = Colors.orange;
     } else {
       daysColor = Colors.black87;
     }
@@ -180,7 +173,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE0E3D5)),
+        border: Border.all(color: AppTheme.primary80),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,7 +195,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ? 'Expired ${daysLeft.abs()} day${daysLeft.abs() == 1 ? '' : 's'} ago'
                     : 'In $daysLeft day${daysLeft == 1 ? '' : 's'}'),
             style: TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w600, color: daysColor),
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: daysColor,
+            ),
           ),
         ],
       ),
@@ -218,7 +214,7 @@ Widget _buildRecentCard(String name, DateTime addedDate) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: const Color(0xFFE0E3D5)),
+      border: Border.all(color: AppTheme.primary80),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,7 +234,7 @@ Widget _buildRecentCard(String name, DateTime addedDate) {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: Colors.green,
+            color: AppTheme.primary80,
           ),
         ),
       ],

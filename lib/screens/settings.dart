@@ -12,7 +12,6 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
-  String _selectedUnit = 'Metric (kg, liters)';
 
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
@@ -65,33 +64,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Future<void> _showUnitsDialog() async {
-    final unit = await showDialog<String>(
-      context: context,
-      builder: (context) => SimpleDialog(
-        title: const Text('Select Measurement System'),
-        children: [
-          RadioListTile(
-            title: const Text('Metric (kg, liters)'),
-            value: 'Metric (kg, liters)',
-            groupValue: _selectedUnit,
-            onChanged: (value) => Navigator.pop(context, value),
-          ),
-          RadioListTile(
-            title: const Text('Imperial (lbs, gallons)'),
-            value: 'Imperial (lbs, gallons)',
-            groupValue: _selectedUnit,
-            onChanged: (value) => Navigator.pop(context, value),
-          ),
-        ],
-      ),
-    );
-    
-    if (unit != null) {
-      setState(() => _selectedUnit = unit);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,12 +81,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               value: _notificationsEnabled,
               onChanged: (value) => setState(() => _notificationsEnabled = value),
             ),
-          ),
-          _buildSettingsItem(
-            icon: Icons.straighten,
-            title: 'Measurement Units',
-            subtitle: _selectedUnit,
-            onTap: _showUnitsDialog,
           ),
           _buildSettingsItem(
             icon: Icons.lock,

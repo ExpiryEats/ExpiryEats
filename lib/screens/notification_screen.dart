@@ -2,9 +2,9 @@ import 'package:expiry_eats/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/widgets/notification_item.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-
-// TODO: make functional with db
-// TODO: maybe link it with
+import 'package:expiry_eats/managers/database_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:expiry_eats/managers/cache_provider.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -14,40 +14,50 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class NotificationScreenState extends State<NotificationScreen> {
-  final List<Map<String, dynamic>> _notifications = [
-    {
-      "ingredientName": "Item 1",
-      "daysToExpiry": 7,
-      "daysSinceReceived": 1,
-    },
-    {
-      "ingredientName": "Item 2",
-      "daysToExpiry": -2,
-      "daysSinceReceived": 3,
-    },
-  ];
+  List<Map<String, dynamic>> _notifications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
+
+  Future<void> _loadNotifications() async {
+    final personId = Provider.of<CacheProvider>(context, listen: false).cache.userId;
+    if (personId == null) return;
+
+    final data = await DatabaseService().getNotifications(personId, dismissed: false);
+    setState(() {
+      _notifications = data;
+    });
+  }
+
+  Future<void> _removeNotification(int index) async {
+    final id = _notifications[index]['notification_id'];
+    await DatabaseService().dismissNotification(id);
+    setState(() {
+      _notifications.removeAt(index);
+    });
+  }
 
   void _confirmRemoveNotification(int index) {
     showDialog(
-      
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Remove Notification"),
-          content: Text("Are you sure you want to remove this notification?"),
+          title: const Text("Remove Notification"),
+          content: const Text("Are you sure you want to remove this notification?"),
           actions: [
             TextButton(
-            
-              onPressed: () => Navigator.of(context).pop(), 
-              child: Text("Cancel"),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancel"),
             ),
             TextButton(
-     
               onPressed: () {
-                Navigator.of(context).pop(); 
-                _removeNotification(index); 
+                Navigator.of(context).pop();
+                _removeNotification(index);
               },
-              child: Text("Remove", style: TextStyle(color: Colors.red)),
+              child: const Text("Remove", style: TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -55,54 +65,48 @@ class NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  void _removeNotification(int index) {
-    setState(() {
-      _notifications.removeAt(index);
-    });
-  }
-
-  List<NotificationItem> _populateNotifications() {
+  List<NotificationItem> _populateNotifications(List<Map<String, dynamic>> notificationTypes) {
     return _notifications.map((notification) {
+      final sent = DateTime.parse(notification['sent_at']);
+      final now = DateTime.now();
+      final daysSinceReceived = now.difference(sent).inDays;
+
+      final typeId = notification['type_id'];
+      final typeName = notificationTypes.firstWhere(
+        (type) => type['type_id'] == typeId,
+        orElse: () => {'type_name': 'Unknown'},
+      )['type_name'];
+
       return NotificationItem(
-        ingredientName: notification["ingredientName"],
-        daysToExpiry: notification["daysToExpiry"],
-        daysSinceReceived: notification["daysSinceReceived"],
-        onClose:
-            () => 
-                _confirmRemoveNotification(
-                    _notifications.indexOf(notification)),
+        typeName: typeName,
+        message: notification['message'],
+        daysSinceReceived: daysSinceReceived,
+        onClose: () => _confirmRemoveNotification(_notifications.indexOf(notification)),
       );
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _notifications.isNotEmpty
-        ? Stack(
-            children: [
-              FadingEdgeScrollView.fromScrollView(
-                gradientFractionOnStart: 0.2,
-                gradientFractionOnEnd: 0.2,
-                child: ListView(
-                  controller: ScrollController(),
-                  children: _populateNotifications(),
-                ),
+    final notificationTypes = Provider.of<CacheProvider>(context).cache.notificationTypes;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: _notifications.isNotEmpty
+          ? FadingEdgeScrollView.fromScrollView(
+              gradientFractionOnStart: 0.2,
+              gradientFractionOnEnd: 0.2,
+              child: ListView(
+                controller: ScrollController(),
+                children: _populateNotifications(notificationTypes),
               ),
-            ],
-          )
-        : Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Align(
-                alignment: Alignment(0.0, 0.0),
-                child: Text(
-                  'No Notifications',
-                  style: AppTextStyle.bold(),
-                ),
+            )
+          : Center(
+              child: Text(
+                'No Notifications',
+                style: AppTextStyle.bold(),
               ),
             ),
-          );
+    );
   }
 }

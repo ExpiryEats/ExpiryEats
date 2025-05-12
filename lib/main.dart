@@ -1,3 +1,4 @@
+import 'package:expiry_eats/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/screens/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -14,13 +15,36 @@ Future<void> main() async {
   final cacheProvider = CacheProvider();
   cacheProvider.fetchReferenceData();
 
-  runApp(
-    ChangeNotifierProvider.value(
-      value: cacheProvider,
-      child: const MaterialApp(
-        home: LoginScreen(),
-        debugShowCheckedModeBanner: false,
+ runApp(
+  ChangeNotifierProvider.value(
+    value: cacheProvider,
+    child: MaterialApp(
+      home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppTheme.primary40, // or your custom green
+          surface: AppTheme.surface, // fixes the purple tint
+        ),
+        scaffoldBackgroundColor: AppTheme.surface,
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.primary80),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.primary80),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.primary80, width: 2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          labelStyle: TextStyle(color: AppTheme.primary80),
+        ),
       ),
     ),
-  );
+  ),
+);
 }

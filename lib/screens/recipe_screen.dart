@@ -18,10 +18,8 @@ class RecipeScreenState extends State<RecipeScreen> {
   late List<Recipe> _displayRecipes;
 
   final List<Recipe> _allRecipes = [
-    Recipe(name: "Test Recipe", imgSrc: "assets/testing_image.jpg", ingredients: ['bacon', 'pasta', 'tomato']),
     Recipe(name: "Omelette", imgSrc: "assets/testing_image.jpg", ingredients: ['egg', 'cheese', 'spinach']),
     Recipe(name: "Lasagna", imgSrc: "assets/testing_image.jpg", ingredients: ['pasta', 'beef', 'cheese']),
-    Recipe(name: "Mashed Potatoes", imgSrc: "assets/testing_image.jpg", ingredients: ['potato', 'chicken', 'herbs']),
   ];
 
   @override
@@ -31,58 +29,58 @@ class RecipeScreenState extends State<RecipeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.surface,
-      body: _allRecipes.isNotEmpty ? Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: SearchBar(
-              leading: const Icon(Icons.search),
-              hintText: 'Search Saved Recipes',
-              onChanged: (query) { setState(() => _displayRecipes = RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes)); },
-            ),
-          ),
-          Expanded(
-            child: FadingEdgeScrollView.fromScrollView(
-              gradientFractionOnStart: 0.2,
-              gradientFractionOnEnd: 0.2,
-              child: ListView(
-                controller: ScrollController(),
-                children: manager.populateRecipes(context, _displayRecipes, MediaQuery.sizeOf(context).width)
+      body: _allRecipes.isNotEmpty
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                children: [
+                  SearchBar(
+                    leading: const Icon(Icons.search),
+                    hintText: 'Search Saved Recipes',
+                    onChanged: (query) {
+                      setState(() => _displayRecipes =
+                          RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes));
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: FadingEdgeScrollView.fromScrollView(
+                      gradientFractionOnStart: 0.2,
+                      gradientFractionOnEnd: 0.2,
+                      child: ListView(
+                        controller: ScrollController(),
+                        children: manager.populateRecipes(
+                          context,
+                          _displayRecipes,
+                          MediaQuery.sizeOf(context).width,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Center(
+                child: Text(
+                  'No Saved Recipes',
+                  style: AppTextStyle.bold(),
+                ),
               ),
             ),
-          ),
-        ],
-      ) : Align(
-        alignment: Alignment.center,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Align(
-            alignment: Alignment(0.0, 0.0),
-            child: Text(
-              'No Saved Recipes',
-              style: AppTextStyle.bold(),
-            ),
-          ),
-        ),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FindRecipeScreen())
+            MaterialPageRoute(builder: (context) => const FindRecipeScreen()),
           );
         },
-        icon: Icon(Icons.add),
-        label: Text('Find New Recipes'),
+        icon: const Icon(Icons.add),
+        label: const Text('Find New Recipes'),
         foregroundColor: AppTheme.surface,
         backgroundColor: AppTheme.primary40,
         hoverColor: AppTheme.primary80,

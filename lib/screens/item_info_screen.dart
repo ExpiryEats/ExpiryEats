@@ -24,49 +24,56 @@ class IteminfoScreen extends StatelessWidget {
     required this.itemExpiryDate,
   });
 
-Future<void> _confirmDeleteItem(BuildContext context, String itemName) async {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Delete Item"),
-        content: Text("Are you sure you want to delete \"$itemName\" from your inventory?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
+  Future<void> _confirmDeleteItem(BuildContext context, String itemName) async {
+    final scaffoldContext = context;
 
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => const AlertDialog(
-                  content: SizedBox(
-                    height: 80,
-                    child: Center(child: CircularProgressIndicator()),
+    showDialog(
+      context: scaffoldContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Item"),
+          content: Text(
+              "Are you sure you want to delete \"$itemName\" from your inventory?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+
+                showDialog(
+                  context: scaffoldContext,
+                  barrierDismissible: false,
+                  builder: (context) => const AlertDialog(
+                    content: SizedBox(
+                      height: 80,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                   ),
-                ),
-              );
+                );
 
-              await DatabaseService().deleteItem(itemId);
-              debugPrint("Item deleted: $itemId");
+                await DatabaseService().deleteItem(itemId);
+                debugPrint("Item deleted: $itemId");
 
-              Navigator.of(context).pop();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen(initialTabIndex: 1)),
-              );
-            },
-            child: const Text("Delete", style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      );
-    },
-  );
-}
+                if (scaffoldContext.mounted) {
+                  Navigator.of(scaffoldContext).pop();
+                  Navigator.pushReplacement(
+                    scaffoldContext,
+                    MaterialPageRoute(
+                      builder: (_) => const HomeScreen(initialTabIndex: 1),
+                    ),
+                  );
+                }
+              },
+              child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

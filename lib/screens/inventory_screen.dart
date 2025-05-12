@@ -8,8 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 
-// TODO: add images from unsplash api
-
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
 
@@ -78,11 +76,11 @@ class InventoryScreenState extends State<InventoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.surface,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchBar(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          children: [
+            SearchBar(
               leading: const Icon(Icons.search),
               hintText: 'Search Inventory',
               onChanged: (query) {
@@ -94,52 +92,53 @@ class InventoryScreenState extends State<InventoryScreen> {
                 });
               },
             ),
-          ),
-          Expanded(
-            child: ListView(
-              children: _groupedDisplayItems.entries.map((entry) {
-                final categoryName = entry.key;
-                final items = entry.value;
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView(
+                children: _groupedDisplayItems.entries.map((entry) {
+                  final categoryName = entry.key;
+                  final items = entry.value;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        categoryName,
-                        style: AppTextStyle.bold(),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          categoryName,
+                          style: AppTextStyle.bold(),
+                        ),
                       ),
-                    ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 3,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 3,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                        ),
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          return InventoryItem(
+                            key: ValueKey(item.itemId),
+                            itemId: item.itemId!,
+                            imageAssetPath: 'assets/testing_image.jpg',
+                            itemName: item.itemName,
+                            category: categoryName,
+                            itemDateAdded: item.dateAdded.toIso8601String(),
+                            itemExpiryDate: item.expirationDate.toIso8601String(),
+                          );
+                        },
                       ),
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        return InventoryItem(
-                          key: ValueKey(item.itemId),
-                          itemId: item.itemId!,
-                          imageAssetPath: 'assets/testing_image.jpg',
-                          itemName: item.itemName,
-                          category: categoryName,
-                          itemDateAdded: item.dateAdded.toIso8601String(),
-                          itemExpiryDate: item.expirationDate.toIso8601String(),
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }).toList(),
+                    ],
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(

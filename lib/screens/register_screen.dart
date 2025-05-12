@@ -1,6 +1,8 @@
 import 'package:expiry_eats/colors.dart';
+import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,63 +17,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String lastName = '';
   String email = '';
   String password = '';
-  final Map<String, int> dietaryRestrictions = {
-    'Vegan': 1,
-    'Vegetarian': 2,
-    'Gluten-Free': 3,
-    'Nut-Free': 4,
-    'Dairy-Free': 5,
-  };
-
   List<int> selectedRestrictionIds = [];
 
   void _handleRegister() async {
-  if (firstName.isEmpty ||
-      lastName.isEmpty ||
-      email.isEmpty ||
-      password.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please fill all fields')),
-    );
-    return;
-  }
-
-  final authManager = AuthManager();
-
-  try {
-    final response = await authManager.signUp(
-      email,
-      password,
-      firstName,
-      lastName,
-      selectedRestrictionIds,
-    );
-
-    if (response.user != null) {
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('You have been registered successfully!'),
-        ),
+        const SnackBar(content: Text('Please fill all fields')),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      return;
+    }
+
+    final authManager = AuthManager();
+
+    try {
+      final response = await authManager.signUp(
+        email,
+        password,
+        firstName,
+        lastName,
+        selectedRestrictionIds,
       );
-    } else {
+
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You have been registered successfully!')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration failed.')),
+        );
+      }
+    } catch (e) {
+      final message = e.toString().replaceFirst('Exception: ', '').trim();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registration failed.')),
+        SnackBar(content: Text(message.isNotEmpty ? message : 'Registration failed.')),
       );
     }
-  } catch (e) {
-    final message = e.toString().replaceFirst('Exception: ', '').trim();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message.isNotEmpty ? message : 'Registration failed.')),
-    );
   }
-}
 
-  void _showDietaryRequirementsDialog() {
+  void _showDietaryRequirementsDialog(List<Map<String, dynamic>> restrictions) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -81,16 +72,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
               title: const Text('Select Dietary Requirements'),
               content: SingleChildScrollView(
                 child: Column(
-                  children: dietaryRestrictions.entries.map((entry) {
+                  children: restrictions.map((entry) {
+                    final id = entry['restriction_id'] as int;
+                    final name = entry['restriction_name'] as String;
                     return CheckboxListTile(
-                      title: Text(entry.key),
-                      value: selectedRestrictionIds.contains(entry.value),
+                      title: Text(name),
+                      value: selectedRestrictionIds.contains(id),
                       onChanged: (bool? value) {
                         localSetState(() {
                           if (value == true) {
-                            selectedRestrictionIds.add(entry.value);
+                            selectedRestrictionIds.add(id);
                           } else {
-                            selectedRestrictionIds.remove(entry.value);
+                            selectedRestrictionIds.remove(id);
                           }
                         });
                       },
@@ -102,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    setState(() {}); // refresh chips
+                    setState(() {});
                   },
                   child: const Text('Done'),
                 ),
@@ -130,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppTheme.surface,
-        foregroundColor: Colors.deepPurple,
+        foregroundColor: AppTheme.primary40,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         minimumSize: const Size.fromHeight(50),
         elevation: 2,
@@ -141,9 +134,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final restrictionTypes = Provider.of<CacheProvider>(context).cache.dietaryRestrictionTypes;
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+            );
+          },
+        ),
+      ),
       body: Container(
-        color: AppTheme.primary80,
+        color: AppTheme.surface,
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: SingleChildScrollView(
@@ -168,16 +177,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 16),
                     _buildInput('Password', (val) => password = val, obscure: true),
                     const SizedBox(height: 16),
-                    _buildRoundedButton('Select Dietary Requirements', _showDietaryRequirementsDialog),
+                    _buildRoundedButton(
+                      'Select Dietary Requirements',
+                      () => _showDietaryRequirementsDialog(restrictionTypes),
+                    ),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8.0,
                       children: selectedRestrictionIds.map((id) {
-                        final name = dietaryRestrictions.entries
-                            .firstWhere((element) => element.value == id)
-                            .key;
+                        final match = restrictionTypes.firstWhere(
+                          (element) => element['restriction_id'] == id,
+                          orElse: () => {'restriction_name': 'Unknown'},
+                        );
                         return Chip(
-                          label: Text(name),
+                          label: Text(match['restriction_name']),
                           onDeleted: () {
                             setState(() {
                               selectedRestrictionIds.remove(id);

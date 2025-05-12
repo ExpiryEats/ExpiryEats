@@ -14,7 +14,7 @@ class Constants {
         title: Text(
           title!,
           style: const TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         actions: [

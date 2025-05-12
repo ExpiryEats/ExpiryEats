@@ -11,6 +11,7 @@ class CacheManager {
   final List<Map<String, dynamic>> categories;
   final List<Map<String, dynamic>> storageTypes;
   final List<Map<String, dynamic>> dietaryRestrictionTypes;
+  final List<Map<String, dynamic>> notificationTypes;
 
   CacheManager({
     this.userId,
@@ -22,6 +23,7 @@ class CacheManager {
     this.categories = const [],
     this.storageTypes = const [],
     this.dietaryRestrictionTypes = const [],
+    this.notificationTypes = const [],
   });
 
   CacheManager copyWith({
@@ -34,6 +36,7 @@ class CacheManager {
     List<Map<String, dynamic>>? categories,
     List<Map<String, dynamic>>? storageTypes,
     List<Map<String, dynamic>>? dietaryRestrictionTypes,
+    List<Map<String, dynamic>>? notificationTypes,
   }) {
     return CacheManager(
       userId: userId ?? this.userId,
@@ -44,7 +47,8 @@ class CacheManager {
       dietaryRequirements: dietaryRequirements ?? this.dietaryRequirements,
       categories: categories ?? this.categories,
       storageTypes: storageTypes ?? this.storageTypes,
-      dietaryRestrictionTypes: dietaryRestrictionTypes ?? this.dietaryRestrictionTypes
+      dietaryRestrictionTypes: dietaryRestrictionTypes ?? this.dietaryRestrictionTypes,
+      notificationTypes: notificationTypes ?? this.notificationTypes,
     );
   }
 }

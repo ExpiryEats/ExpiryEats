@@ -43,7 +43,7 @@ class HomeScreenState extends State<HomeScreen> {
       label: 'Inventory',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.food_bank_outlined),
+      icon: Icon(Icons.book),
       label: 'Recipes',
     ),
     BottomNavigationBarItem(
@@ -53,7 +53,6 @@ class HomeScreenState extends State<HomeScreen> {
   ];
 
   void onTapHandler(int index) {
-
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 750),
@@ -78,11 +77,21 @@ class HomeScreenState extends State<HomeScreen> {
         },
         children: _pages,
       ),
-      backgroundColor: AppTheme.surface,
+      backgroundColor: AppTheme.background,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppTheme.primary40,
-        unselectedItemColor: AppTheme.unselected,
-        unselectedLabelStyle: TextStyle(color: AppTheme.unselected),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: AppTheme.primary40,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+        showUnselectedLabels: false,
         currentIndex: _selectedIndex,
         onTap: onTapHandler,
         items: _bottomNavigationBarItems,

@@ -29,6 +29,58 @@ class DatabaseService {
         .eq('person_id', personId);
     return List<Map<String, dynamic>>.from(response);
   }
+
+  /* notifications */
+
+Future<List<Map<String, dynamic>>> getNotifications(int personId, {bool? dismissed}) async {
+  var query = _supabase
+      .from('notification')
+      .select('*, notification_type(type_name)')
+      .eq('person_id', personId);
+
+  if (dismissed != null) {
+    query = query.eq('dismissed', dismissed);
+  }
+
+  query.order('sent_at', ascending: false);
+
+  final response = await query;
+  return List<Map<String, dynamic>>.from(response);
+}
+
+  Future<void> insertNotification({
+    required int personId,
+    required String message,
+    required int typeId,
+    int? itemId,
+  }) async {
+    final notificationData = {
+      'person_id': personId,
+      'message': message,
+      'type_id': typeId,
+      'sent_at': DateTime.now().toIso8601String(),
+      'dismissed': false,
+    };
+
+    if (itemId != null) {
+      notificationData['item_id'] = itemId;
+    }
+
+    await _supabase.from('notification').insert(notificationData);
+  }
+
+  Future<void> deleteNotification(int notificationId) async {
+    await _supabase
+        .from('notification')
+        .delete()
+        .eq('notification_id', notificationId);
+  }
+
+  Future<void> dismissNotification(int notificationId) async {
+    await _supabase
+        .from('notification')
+        .update({'dismissed': true}).eq('notification_id', notificationId);
+  }
 }
 
 class AuthManager {
