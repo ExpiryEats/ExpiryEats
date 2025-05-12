@@ -3,23 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
 import 'package:expiry_eats/screens/settings.dart';
 import 'package:expiry_eats/screens/login_screen.dart';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Constants {
   static AppBar customAppBar({required BuildContext context, String? title}) =>
       AppBar(
-        automaticallyImplyLeading: false, // removes back button
+        automaticallyImplyLeading: false,
         foregroundColor: Colors.white,
-        title: Text(
-          title!,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
+        backgroundColor: AppTheme.primary40,
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/ExpiryLogoT.png',
+              height: 42,
+              width: 42,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              title!,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.menu, size: 30.0), // Profile Icon
+            icon: const Icon(Icons.menu, size: 30.0),
             onSelected: (String value) async {
               if (value == "Profile") {
                 Navigator.push(
@@ -68,22 +81,21 @@ class Constants {
                 }
               }
             },
-            itemBuilder: (BuildContext context) => [
-              const PopupMenuItem<String>(
+            itemBuilder: (BuildContext context) => const [
+              PopupMenuItem<String>(
                 value: "Profile",
                 child: Text("Profile"),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: "Settings",
                 child: Text("Settings"),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: "Logout",
                 child: Text("Log Out"),
               ),
             ],
           ),
         ],
-        backgroundColor: AppTheme.primary40,
       );
 }

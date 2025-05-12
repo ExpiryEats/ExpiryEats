@@ -23,10 +23,19 @@ class NotificationScreenState extends State<NotificationScreen> {
   }
 
   Future<void> _loadNotifications() async {
-    final personId = Provider.of<CacheProvider>(context, listen: false).cache.userId;
+    final personId =
+        Provider.of<CacheProvider>(context, listen: false).cache.userId;
     if (personId == null) return;
 
-    final data = await DatabaseService().getNotifications(personId, dismissed: false);
+    final data =
+        await DatabaseService().getNotifications(personId, dismissed: false);
+
+    data.sort((a, b) {
+      final aDate = DateTime.parse(a['sent_at']);
+      final bDate = DateTime.parse(b['sent_at']);
+      return bDate.compareTo(aDate); // newest first
+    });
+
     setState(() {
       _notifications = data;
     });
@@ -65,11 +74,10 @@ class NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  List<NotificationItem> _populateNotifications(List<Map<String, dynamic>> notificationTypes) {
+  List<NotificationItem> _populateNotifications(
+      List<Map<String, dynamic>> notificationTypes) {
     return _notifications.map((notification) {
-      final sent = DateTime.parse(notification['sent_at']);
-      final now = DateTime.now();
-      final daysSinceReceived = now.difference(sent).inDays;
+      final sentAt = DateTime.parse(notification['sent_at']);
 
       final typeId = notification['type_id'];
       final typeName = notificationTypes.firstWhere(
@@ -80,15 +88,17 @@ class NotificationScreenState extends State<NotificationScreen> {
       return NotificationItem(
         typeName: typeName,
         message: notification['message'],
-        daysSinceReceived: daysSinceReceived,
-        onClose: () => _confirmRemoveNotification(_notifications.indexOf(notification)),
+        sentAt: sentAt,
+        onClose: () =>
+            _confirmRemoveNotification(_notifications.indexOf(notification)),
       );
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final notificationTypes = Provider.of<CacheProvider>(context).cache.notificationTypes;
+    final notificationTypes =
+        Provider.of<CacheProvider>(context).cache.notificationTypes;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
