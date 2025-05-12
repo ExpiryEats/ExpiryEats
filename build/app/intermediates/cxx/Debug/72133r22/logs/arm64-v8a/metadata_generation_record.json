@@ -1,0 +1,41 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 21 min SDK version: arm64-v8a",
+    "file_": "C:\\SDKs\\FlutterSDK\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt",
+    "tag_": "profile|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "JSON \u0027C:\\Users\\bruno\\Documents\\Coding 2\\Year 2\\SetApp\\ExpiryEats\\ExpiryEats\\android\\app\\.cxx\\Debug\\72133r22\\arm64-v8a\\android_gradle_build.json\u0027 was up-to-date",
+    "file_": "C:\\SDKs\\FlutterSDK\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt",
+    "tag_": "profile|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed without problems",
+    "file_": "C:\\SDKs\\FlutterSDK\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt",
+    "tag_": "profile|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  }
+]

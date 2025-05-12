@@ -28,11 +28,15 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  image_picker: ^0.8.7+1  # For image selection
+  image_picker: ^0.8.9  # For image selection
   path_provider: ^2.1.1  # For file handling
   flutter:
     sdk: flutter
   provider: ^6.0.5
+  http: ^0.13.6
+  file_picker: ^10.1.7
+  path: ^1.8.3
+  mobile_scanner: ^7.0.0
   
   fading_edge_scrollview: ^4.1.1
 

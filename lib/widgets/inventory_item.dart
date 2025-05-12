@@ -1,10 +1,12 @@
 import 'package:expiry_eats/screens/item_info_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:expiry_eats/styles.dart'; 
+import 'package:expiry_eats/styles.dart';
+import 'package:intl/intl.dart'; 
+
 
 class InventoryItem extends StatelessWidget {
   final int itemId;
-  final String imageAssetPath;
+  final String? imageUrl;
   final String itemName;
   final String category;
   final String itemDateAdded;
@@ -13,7 +15,7 @@ class InventoryItem extends StatelessWidget {
   const InventoryItem({
     super.key,
     required this.itemId,
-    required this.imageAssetPath,
+    required this.imageUrl,
     required this.itemName,
     required this.category,
     required this.itemDateAdded,
@@ -23,8 +25,6 @@ class InventoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center( 
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.5, 
         child: Card(
           clipBehavior: Clip.hardEdge,
           child: InkWell(
@@ -37,7 +37,7 @@ class InventoryItem extends StatelessWidget {
                     itemId: itemId,
                     itemName: itemName,
                     category: category,
-                    itemImage: imageAssetPath,
+                    itemImage: imageUrl?? 'assets/tesing_image.jpg',
                     itemDateAdded: itemDateAdded,
                     itemExpiryDate: itemExpiryDate,
                   ),
@@ -51,30 +51,42 @@ class InventoryItem extends StatelessWidget {
                 children: [
                   // Image container
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height,
-                    child: Image.asset(
-                      imageAssetPath,
+                    child: imageUrl != null? 
+                    Image.network(
+                      imageUrl!,
                       fit: BoxFit.cover,
-                    ),
+                      errorBuilder: (_, __, ___) =>_buildDefaultImage(),
+                    )
+                  : _buildDefaultImage(),
                   ),
                   // Text content
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center, 
-                      children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start, 
+                        children: [
+                          Text(
+                            itemName,
+                            style: AppTextStyle.bold(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),  
+                          const SizedBox(height: 32),
                         Text(
-                          itemName,
-                          style: AppTextStyle.bold(),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          category,
-                          style: AppTextStyle.medium(),
-                        ),
-                      ],
+                            category,
+                            style: AppTextStyle.medium(),
+                          ),
+                          const SizedBox(height: 32),
+                          Text(
+                            'Expiry Date:${DateFormat('dd/MM/yyyy').format(DateTime.parse(itemExpiryDate))}',
+                            style: AppTextStyle.medium(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -82,7 +94,12 @@ class InventoryItem extends StatelessWidget {
             ),
           ),
         ),
-      ),
+    );
+  }
+  Widget _buildDefaultImage() {
+    return Image.asset(
+      'assets/testing_image.jpg',
+      fit: BoxFit.cover,
     );
   }
 }

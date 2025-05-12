@@ -1,0 +1,2 @@
+C:/Users/bruno/Documents/Coding 2/Year 2/SetApp/ExpiryEats/ExpiryEats/android/app/.cxx/Debug/72133r22/x86/CMakeFiles/edit_cache.dir
+C:/Users/bruno/Documents/Coding 2/Year 2/SetApp/ExpiryEats/ExpiryEats/android/app/.cxx/Debug/72133r22/x86/CMakeFiles/rebuild_cache.dir

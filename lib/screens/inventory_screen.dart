@@ -111,27 +111,24 @@ class InventoryScreenState extends State<InventoryScreen> {
                         style: AppTextStyle.bold(),
                       ),
                     ),
-                    GridView.builder(
+                    ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 3,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                      ),
                       itemCount: items.length,
                       itemBuilder: (context, index) {
                         final item = items[index];
-                        return InventoryItem(
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: InventoryItem(
                           key: ValueKey(item.itemId),
                           itemId: item.itemId!,
-                          imageAssetPath: 'assets/testing_image.jpg',
+                          imageUrl: item.imageUrl,
                           itemName: item.itemName,
                           category: categoryName,
                           itemDateAdded: item.dateAdded.toIso8601String(),
                           itemExpiryDate: item.expirationDate.toIso8601String(),
-                        );
+                          ),
+                        ); 
                       },
                     ),
                   ],
