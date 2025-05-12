@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
-
-// TODO: make functional with db
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -20,7 +19,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.warning, color: Colors.red, size: 40),
         title: const Text('Delete Account', style: TextStyle(fontSize: 24)),
-        content: const Text('All your data will be permanently removed. This action cannot be undone.'),
+        content: const Text(
+            'All your data will be permanently removed. This action cannot be undone.'),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
           TextButton(
@@ -56,12 +56,99 @@ class _SettingsScreenState extends State<SettingsScreen> {
           subtitle: subtitle != null ? Text(subtitle) : null,
           trailing: trailing,
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           tileColor: Colors.grey.shade100,
         ),
         const Divider(height: 1),
       ],
+    );
+  }
+
+  void _showChangePasswordDialog(BuildContext context) {
+    final newPasswordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    bool loading = false;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            title: const Text("Change Password"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: newPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: "New Password"),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  decoration:
+                      const InputDecoration(labelText: "Confirm Password"),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: loading
+                    ? null
+                    : () async {
+                        final newPass = newPasswordController.text.trim();
+                        final confirmPass =
+                            confirmPasswordController.text.trim();
+
+                        if (newPass != confirmPass) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Passwords do not match")),
+                          );
+                          return;
+                        }
+
+                        setState(() => loading = true);
+                        final supabase = Supabase.instance.client;
+                        try {
+                          final res = await supabase.auth
+                              .updateUser(UserAttributes(password: newPass));
+                          if (res.user != null) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Password updated successfully")),
+                            );
+                          }
+                        } catch (_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Failed to update password")),
+                          );
+                        } finally {
+                          setState(() => loading = false);
+                        }
+                      },
+                child: loading
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text("Update"),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -86,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
-    
+
     if (unit != null) {
       setState(() => _selectedUnit = unit);
     }
@@ -107,7 +194,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: 'Notifications',
             trailing: Switch(
               value: _notificationsEnabled,
-              onChanged: (value) => setState(() => _notificationsEnabled = value),
+              onChanged: (value) =>
+                  setState(() => _notificationsEnabled = value),
             ),
           ),
           _buildSettingsItem(
@@ -119,7 +207,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSettingsItem(
             icon: Icons.lock,
             title: 'Change Password',
-            onTap: () => Navigator.pushNamed(context, '/change-password'),
+            onTap: () => _showChangePasswordDialog(context),
           ),
           _buildSettingsItem(
             icon: Icons.delete,
@@ -135,7 +223,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               applicationName: 'ExpiryEats',
               applicationVersion: '1.0.0',
               applicationIcon: const Icon(Icons.fastfood, size: 40),
-              applicationLegalese: '© 2024 ExpiryEats\nReduce food waste effectively',
+              applicationLegalese:
+                  '© 2024 ExpiryEats\nReduce food waste effectively',
             ),
           ),
         ],

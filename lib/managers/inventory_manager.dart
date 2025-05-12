@@ -6,7 +6,9 @@ class InventoryManager {
     if (searchTerm == null || searchTerm == '') {
       output = allItems;
     } else {
-      output = allItems.where((item) => item.name.toLowerCase().contains(searchTerm)).toList();
+      output = allItems
+          .where((item) => item.itemName.toLowerCase().contains(searchTerm))
+          .toList();
     }
 
     return output;
