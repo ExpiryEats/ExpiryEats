@@ -29,6 +29,43 @@ class DatabaseService {
         .eq('person_id', personId);
     return List<Map<String, dynamic>>.from(response);
   }
+
+  Future<List<Map<String, dynamic>>> getNotifications(String personId) async {
+    final response = await _supabase
+        .from('notifications')
+        .select(
+            'notification_id, person_id, message, type_id, read_status, send_at, type_id(type_name)')
+        .eq('person_id', personId)
+        .order('send_at', ascending: false);
+
+    return List<Map<String, dynamic>>.from(response);
+  }
+
+  Future<void> markNotificationAsRead(int notificationId) async {
+    await _supabase
+        .from('notifications')
+        .update({'read_status': true}).eq('notification_id', notificationId);
+  }
+
+  Future<void> createNotification({
+    required String personId,
+    required String message,
+    required int typeId,
+  }) async {
+    await _supabase.from('notifications').insert({
+      'person_id': personId,
+      'message': message,
+      'type_id': typeId,
+      'send_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  Future<void> deleteNotification(int notificationId) async {
+    await _supabase
+        .from('notifications')
+        .delete()
+        .eq('notification_id', notificationId);
+  }
 }
 
 class AuthManager {
