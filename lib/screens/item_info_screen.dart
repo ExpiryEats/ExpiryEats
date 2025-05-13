@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:expiry_eats/screens/home_screen.dart';
 
-// TODO: add editing inventory items
-
 class IteminfoScreen extends StatelessWidget {
   final int itemId;
   final String itemName;
@@ -77,6 +75,14 @@ class IteminfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isMissing = itemImage.trim().isEmpty || itemImage == 'NULL';
+    final String fallbackAsset = 'assets/testing_image.jpg';
+    final ImageProvider imageProvider = isMissing
+        ? AssetImage(fallbackAsset)
+        : itemImage.startsWith('http')
+            ? NetworkImage(itemImage)
+            : AssetImage(itemImage) as ImageProvider;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(itemName),
@@ -94,11 +100,14 @@ class IteminfoScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              itemImage,
-              width: 200,
-              height: 200,
-              fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image(
+                image: imageProvider,
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(height: 20),
             Text(

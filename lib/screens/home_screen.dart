@@ -39,7 +39,7 @@ class HomeScreenState extends State<HomeScreen> {
       label: 'Dashboard',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.shopping_cart),
+      icon: Icon(Icons.kitchen),
       label: 'Inventory',
     ),
     BottomNavigationBarItem(

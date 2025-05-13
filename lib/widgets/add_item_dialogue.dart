@@ -1,3 +1,4 @@
+import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/item.dart';
@@ -54,8 +55,12 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
         .join(' ');
   }
 
-  void _submit() {
+  void _submit() async{
     final cache = Provider.of<CacheProvider>(context, listen: false);
+
+    final formattedItemName = formatItemName(_nameController.text);
+
+    final imageUrl = await UnsplashService.fetchImageUrl(formattedItemName);
 
     if (_formKey.currentState!.validate() &&
         _selectedCategoryId != null &&
@@ -66,9 +71,10 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
         personId: cache.cache.userId!,
         categoryId: _selectedCategoryId!,
         storageTypeId: _selectedStorageTypeId!,
-        itemName: formatItemName(_nameController.text),
+        itemName: formattedItemName,
         expirationDate: _selectedExpiryDate!,
         dateAdded: DateTime.now(),
+        imageUrl: imageUrl,
       );
 
       widget.onItemAdded(newItem);

@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Image.asset('assets/ExpiryLogo.png', height: 200),
             const SizedBox(height: 16),
-            const Divider(color: Colors.black, thickness: 5),
+            const Divider(color: Colors.grey, thickness: 2),
             const SizedBox(height: 16),
             const Text('Profile Details',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),

@@ -4,24 +4,35 @@ import 'package:expiry_eats/styles.dart';
 
 class InventoryItem extends StatelessWidget {
   final int itemId;
-  final String imageAssetPath;
   final String itemName;
   final String category;
   final String itemDateAdded;
   final String itemExpiryDate;
+  final String? imageUrl;
 
   const InventoryItem({
     super.key,
     required this.itemId,
-    required this.imageAssetPath,
     required this.itemName,
     required this.category,
     required this.itemDateAdded,
     required this.itemExpiryDate,
+    required this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isMissing = imageUrl == null ||
+        imageUrl!.trim().isEmpty ||
+        imageUrl == 'NULL';
+    final fallbackAsset = 'assets/testing_image.jpg';
+
+    final ImageProvider imageProvider = isMissing
+        ? AssetImage(fallbackAsset)
+        : imageUrl!.startsWith('http')
+            ? NetworkImage(imageUrl!)
+            : AssetImage(imageUrl!) as ImageProvider;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return Card(
@@ -36,7 +47,7 @@ class InventoryItem extends StatelessWidget {
                     itemId: itemId,
                     itemName: itemName,
                     category: category,
-                    itemImage: imageAssetPath,
+                    itemImage: imageUrl ?? fallbackAsset,
                     itemDateAdded: itemDateAdded,
                     itemExpiryDate: itemExpiryDate,
                   ),
@@ -52,7 +63,7 @@ class InventoryItem extends StatelessWidget {
                     width: constraints.maxWidth * 0.4,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(imageAssetPath),
+                        image: imageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),

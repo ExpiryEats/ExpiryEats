@@ -124,7 +124,7 @@ class InventoryScreenState extends State<InventoryScreen> {
                           return InventoryItem(
                             key: ValueKey(item.itemId),
                             itemId: item.itemId!,
-                            imageAssetPath: 'assets/testing_image.jpg',
+                            imageUrl: item.imageUrl,
                             itemName: item.itemName,
                             category: categoryName,
                             itemDateAdded: item.dateAdded.toIso8601String(),

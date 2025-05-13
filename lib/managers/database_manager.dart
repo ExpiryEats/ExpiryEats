@@ -1,5 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class DatabaseService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
@@ -32,21 +35,22 @@ class DatabaseService {
 
   /* notifications */
 
-Future<List<Map<String, dynamic>>> getNotifications(int personId, {bool? dismissed}) async {
-  var query = _supabase
-      .from('notification')
-      .select('*, notification_type(type_name)')
-      .eq('person_id', personId);
+  Future<List<Map<String, dynamic>>> getNotifications(int personId,
+      {bool? dismissed}) async {
+    var query = _supabase
+        .from('notification')
+        .select('*, notification_type(type_name)')
+        .eq('person_id', personId);
 
-  if (dismissed != null) {
-    query = query.eq('dismissed', dismissed);
+    if (dismissed != null) {
+      query = query.eq('dismissed', dismissed);
+    }
+
+    query.order('sent_at', ascending: false);
+
+    final response = await query;
+    return List<Map<String, dynamic>>.from(response);
   }
-
-  query.order('sent_at', ascending: false);
-
-  final response = await query;
-  return List<Map<String, dynamic>>.from(response);
-}
 
   Future<void> insertNotification({
     required int personId,
@@ -137,5 +141,24 @@ class AuthManager {
       print('Login error: $e');
       return null;
     }
+  }
+}
+
+class UnsplashService {
+  static const String accessKey = '-T_kM8VtklcdBy5US1KUs35IuO03DFvh18Jq-ij5Knw';
+
+  static Future<String?> fetchImageUrl(String query) async {
+    final url = Uri.parse('https://api.unsplash.com/search/photos?query=$query&client_id=$accessKey');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final results = data['results'];
+      if (results.isNotEmpty) {
+        return results[0]['urls']['regular'];
+      }
+    }
+    return null;
   }
 }
