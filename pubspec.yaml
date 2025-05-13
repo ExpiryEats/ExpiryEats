@@ -36,7 +36,7 @@ dependencies:
   http: ^0.13.6
   file_picker: ^10.1.7
   path: ^1.8.3
-  mobile_scanner: ^7.0.0
+  mobile_scanner: 6.0.10
   
   fading_edge_scrollview: ^4.1.1
 
