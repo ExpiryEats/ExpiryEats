@@ -43,45 +43,46 @@ class FindRecipeScreenState extends State<FindRecipeScreen> {
         foregroundColor: AppTheme.surface,
       ),
       backgroundColor: AppTheme.surface,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchBar(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          children: [
+            SearchBar(
               leading: const Icon(Icons.search),
               hintText: 'Search New Recipes',
               onSubmitted: _searchRecipes,
             ),
-          ),
-          if (_isLoading)
-            const Expanded(
-              child: Center(child: CircularProgressIndicator()),
-            )
-          else if (_displayRecipes.isNotEmpty)
-            Expanded(
-              child: FadingEdgeScrollView.fromScrollView(
-                gradientFractionOnStart: 0.2,
-                gradientFractionOnEnd: 0.2,
-                child: ListView(
-                  controller: ScrollController(),
-                  children: manager.populateRecipes(
-                    context,
-                    _displayRecipes,
-                    MediaQuery.sizeOf(context).width,
+            const SizedBox(height: 12),
+            if (_isLoading)
+              const Expanded(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (_displayRecipes.isNotEmpty)
+              Expanded(
+                child: FadingEdgeScrollView.fromScrollView(
+                  gradientFractionOnStart: 0.2,
+                  gradientFractionOnEnd: 0.2,
+                  child: ListView(
+                    controller: ScrollController(),
+                    children: manager.populateRecipes(
+                      context,
+                      _displayRecipes,
+                      MediaQuery.sizeOf(context).width,
+                    ),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: Center(
+                  child: Text(
+                    'Search For Recipes',
+                    style: AppTextStyle.bold(),
                   ),
                 ),
               ),
-            )
-          else
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Search For Recipes',
-                  style: AppTextStyle.bold(),
-                ),
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

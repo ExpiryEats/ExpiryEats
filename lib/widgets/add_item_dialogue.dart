@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:expiry_eats/screens/barcode_scanner_screen.dart';
 
 class AddItemDialogue extends StatefulWidget {
   final Function(Item) onItemAdded;
@@ -45,6 +50,71 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
     }
   }
 
+  Future<void> _scanBarcode() async {
+    final String? barcode = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (context) => const BarcodeScannerScreen()),
+    );
+
+    if (barcode != null && mounted) {
+      await _fetchProductInfo(barcode);
+    }
+  }
+
+  Future<void> _fetchProductInfo(String barcode) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://world.openfoodfacts.org/api/v2/product/$barcode.json'),
+      );
+
+      if (response.statusCode == 200) {
+        final productData = jsonDecode(response.body);
+        if (productData['status'] == 1) {
+          final product = productData['product'];
+
+          setState(() {
+            _nameController.text = product['product_name']?.toString() ?? '';
+
+            if (product['expiration_date'] != null) {
+              _selectedExpiryDate =
+                  DateFormat('yyyy-MM-dd').parse(product['expiration_date']);
+              _expiryController.text =
+                  DateFormat('dd/MM/yyyy').format(_selectedExpiryDate!);
+            }
+
+            _autoSelectCategory(product['categories']?.toString());
+          });
+        } else {
+          _showSnackBar('Product not found in database');
+        }
+      }
+    } catch (e) {
+      _showSnackBar('Error fetching product info: ${e.toString()}');
+    }
+  }
+
+  void _autoSelectCategory(String? categories) {
+    if (categories == null) return;
+
+    final cache = Provider.of<CacheProvider>(context, listen: false);
+    final categoryList = categories.split(',').map((c) => c.trim()).toList();
+
+    for (final category in categoryList) {
+      final match = cache.cache.categories.firstWhere(
+        (c) =>
+            c['category_name'].toString().toLowerCase() ==
+            category.toLowerCase(),
+        orElse: () => {},
+      );
+
+      if (match.isNotEmpty) {
+        setState(() => _selectedCategoryId = match['category_id']);
+        break;
+      }
+    }
+  }
+
   String formatItemName(String name) {
     return name
         .trim()
@@ -55,12 +125,16 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
         .join(' ');
   }
 
-  void _submit() async{
+  void _showSnackBar(String msg) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    }
+  }
+
+  void _submit() async {
     final cache = Provider.of<CacheProvider>(context, listen: false);
-
-    final formattedItemName = formatItemName(_nameController.text);
-
-    final imageUrl = await UnsplashService.fetchImageUrl(formattedItemName);
+    final formattedName = formatItemName(_nameController.text);
+    final imageUrl = await UnsplashService.fetchImageUrl(formattedName);
 
     if (_formKey.currentState!.validate() &&
         _selectedCategoryId != null &&
@@ -71,7 +145,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
         personId: cache.cache.userId!,
         categoryId: _selectedCategoryId!,
         storageTypeId: _selectedStorageTypeId!,
-        itemName: formattedItemName,
+        itemName: formattedName,
         expirationDate: _selectedExpiryDate!,
         dateAdded: DateTime.now(),
         imageUrl: imageUrl,
@@ -80,9 +154,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
       widget.onItemAdded(newItem);
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please complete all fields')),
-      );
+      _showSnackBar('Please complete all fields');
     }
   }
 
@@ -98,6 +170,18 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton.icon(
+                      onPressed: _scanBarcode,
+                      label: const Text('Scan Barcode'),
+                      icon: const Icon(Icons.qr_code_scanner),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -170,13 +254,9 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _submit,
-          child: const Text('Add Item'),
-        ),
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel')),
+        ElevatedButton(onPressed: _submit, child: const Text('Add Item')),
       ],
     );
   }
