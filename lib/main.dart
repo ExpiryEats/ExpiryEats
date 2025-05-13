@@ -15,36 +15,45 @@ Future<void> main() async {
   final cacheProvider = CacheProvider();
   cacheProvider.fetchReferenceData();
 
- runApp(
-  ChangeNotifierProvider.value(
-    value: cacheProvider,
-    child: MaterialApp(
-      home: const LoginScreen(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppTheme.primary40, // or your custom green
-          surface: AppTheme.surface, // fixes the purple tint
-        ),
-        scaffoldBackgroundColor: AppTheme.surface,
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.primary80),
-            borderRadius: BorderRadius.circular(8),
+  runApp(
+    ChangeNotifierProvider.value(
+      value: cacheProvider,
+      child: MaterialApp(
+        home: const LoginScreen(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          scaffoldBackgroundColor: AppTheme.surface,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppTheme.primary40,
+            surface: AppTheme.surface,
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.primary80),
-            borderRadius: BorderRadius.circular(8),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: AppTheme.primary80,
+            iconTheme: IconThemeData(color: Colors.white),
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.primary80, width: 2),
-            borderRadius: BorderRadius.circular(8),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primary80),
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primary80),
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primary80, width: 2),
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            labelStyle: TextStyle(color: AppTheme.primary80),
           ),
-          labelStyle: TextStyle(color: AppTheme.primary80),
         ),
       ),
     ),
-  ),
-);
+  );
 }
