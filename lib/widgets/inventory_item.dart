@@ -1,6 +1,6 @@
 import 'package:expiry_eats/screens/item_info_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:expiry_eats/styles.dart'; 
+import 'package:expiry_eats/styles.dart';
 
 class InventoryItem extends StatelessWidget {
   final int itemId;
@@ -22,10 +22,9 @@ class InventoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center( 
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.5, 
-        child: Card(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Card(
           clipBehavior: Clip.hardEdge,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
@@ -46,43 +45,42 @@ class InventoryItem extends StatelessWidget {
               debugPrint('Item tapped: $itemName');
             },
             child: SizedBox(
-              height: MediaQuery.of(context).size.width * 0.5, 
+              height: constraints.maxWidth * 0.6,
               child: Row(
                 children: [
-                  // Image container
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    height: MediaQuery.of(context).size.height,
-                    child: Image.asset(
-                      imageAssetPath,
-                      fit: BoxFit.cover,
+                  Container(
+                    width: constraints.maxWidth * 0.4,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(imageAssetPath),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                  // Text content
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center, 
-                      children: [
-                        Text(
-                          itemName,
-                          style: AppTextStyle.bold(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(itemName, style: AppTextStyle.bold()),
+                            const SizedBox(height: 4),
+                            Text(category, style: AppTextStyle.medium()),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          category,
-                          style: AppTextStyle.medium(),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

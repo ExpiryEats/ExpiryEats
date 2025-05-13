@@ -1,7 +1,6 @@
 import 'package:expiry_eats/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
-import 'package:expiry_eats/screens/settings.dart';
 import 'package:expiry_eats/screens/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -41,13 +40,7 @@ class Constants {
                     builder: (context) => ProfileScreen(),
                   ),
                 );
-              } else if (value == "Settings") {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsScreen(),
-                  ),
-                );
+          
               } else if (value == "Logout") {
                 final confirmed = await showDialog<bool>(
                   context: context,
@@ -85,10 +78,6 @@ class Constants {
               PopupMenuItem<String>(
                 value: "Profile",
                 child: Text("Profile"),
-              ),
-              PopupMenuItem<String>(
-                value: "Settings",
-                child: Text("Settings"),
               ),
               PopupMenuItem<String>(
                 value: "Logout",
