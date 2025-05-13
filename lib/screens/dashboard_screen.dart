@@ -34,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     items.sort((a, b) => b.dateAdded.compareTo(a.dateAdded));
 
     setState(() {
-      _recentItems = items.take(5).toList();
+      _recentItems = items.take(5).toList().reversed.toList();
     });
   }
 
