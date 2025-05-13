@@ -43,7 +43,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (response.user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You have been registered successfully!')),
+          const SnackBar(
+              content: Text('You have been registered successfully!')),
         );
         Navigator.pushReplacement(
           context,
@@ -57,7 +58,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '').trim();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message.isNotEmpty ? message : 'Registration failed.')),
+        SnackBar(
+            content:
+                Text(message.isNotEmpty ? message : 'Registration failed.')),
       );
     }
   }
@@ -107,7 +110,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildInput(String label, Function(String) onChanged, {bool obscure = false}) {
+  Widget _buildInput(String label, Function(String) onChanged,
+      {bool obscure = false}) {
     return TextField(
       onChanged: onChanged,
       obscureText: obscure,
@@ -134,12 +138,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final restrictionTypes = Provider.of<CacheProvider>(context).cache.dietaryRestrictionTypes;
+    final restrictionTypes =
+        Provider.of<CacheProvider>(context).cache.dietaryRestrictionTypes;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: AppTheme.primary80,
+        foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -152,7 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       body: Container(
-        color: AppTheme.surface,
+        color: AppTheme.primary80,
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: SingleChildScrollView(
@@ -175,7 +180,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 16),
                     _buildInput('Email', (val) => email = val),
                     const SizedBox(height: 16),
-                    _buildInput('Password', (val) => password = val, obscure: true),
+                    _buildInput('Password', (val) => password = val,
+                        obscure: true),
                     const SizedBox(height: 16),
                     _buildRoundedButton(
                       'Select Dietary Requirements',
