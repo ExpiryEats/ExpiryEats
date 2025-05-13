@@ -87,13 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset('assets/ExpiryLogo.png', height: 160),
-                      const SizedBox(height: 12),
-                      const Text(
-                        'Expiry Eats',
-                        style: TextStyle(
-                            fontSize: 32, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 64),
                       _buildInputField('Email', emailController),
                       const SizedBox(height: 16),
                       TextField(
