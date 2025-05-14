@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   late MobileScannerController cameraController;
   String? _scannedBarcode;
   bool _torchEnabled = false;
+  bool _isScanComplete = false;
 
   @override
   void initState() {
@@ -39,6 +41,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               cameraController.toggleTorch();
             },
           ),
+          if (_scannedBarcode != null)
+            IconButton(
+              icon: const Icon(Icons.check),
+              onPressed:() {
+                Navigator.pop(context, _scannedBarcode);
+              },
+            ),
         ],
       ),
       body: Column(
@@ -47,11 +56,17 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             child: MobileScanner(
               controller: cameraController,
               onDetect: (BarcodeCapture capture) {
+                if (_isScanComplete) return;
+
                 final List<Barcode> barcodes = capture.barcodes;
                 if (barcodes.isNotEmpty) {
                   final String? barcode = barcodes.first.rawValue;
                   if (barcode != null && mounted) {
-                    Navigator.pop(context, barcode);
+                    setState(() {
+                      _isScanComplete = true;
+                      _scannedBarcode = barcode;
+                    });
+                    HapticFeedback.vibrate();
                   }
                 }
               },
@@ -60,14 +75,34 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           if (_scannedBarcode != null)
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text(
+              child: Column(
+              children: [
+                Text(
                 'Scanned Code: $_scannedBarcode',
                 style: const TextStyle(
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, _scannedBarcode);
+                },
+                child: const Text('Use this Barcode'),
+              ),
+              const SizedBox(height: 8),
+              TextButton(onPressed: () {
+                setState(() {
+                  _scannedBarcode = null;
+                  _isScanComplete = false;
+                });
+              },
+              child: const Text('Scan Again'),
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
