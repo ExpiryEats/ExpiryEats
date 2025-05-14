@@ -45,7 +45,7 @@ This method simply adds an item to the database using its data:
 Delete An Item
 --------------
 
-This method simply adds an item to the database using its data:
+This method deletes an item in the database using its unique identifier:
 
 ``Future<void> deleteItem(int itemId) async {}``
 
