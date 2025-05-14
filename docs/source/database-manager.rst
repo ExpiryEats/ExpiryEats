@@ -42,6 +42,15 @@ This function simply adds an item to the database using its data:
         await _supabase.from('item').insert(itemData);
     }
 
+Delete An Item
+--------------
+
+This function simply adds an item to the database using its data:
+
+``Future<void> insertItem(Map<String, dynamic> itemData) async {}``
+
+* itemId - The unique identifier for an individual item.
+
 .. autosummary::
    :toctree: generated
 
