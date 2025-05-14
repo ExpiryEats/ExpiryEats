@@ -25,13 +25,15 @@ This function will send an http request to the external API and handles a list o
 
          if (response.statusCode == 200) {
             final listResponse = json.decode(response.body);
-            return getRecipesById(listResponse["meals"]); # Gets information on each recipe using its ID
+            # Gets information on each recipe using its ID
+            return getRecipesById(listResponse["meals"]);
          }
       } catch (e) {
          print(e);
       }
    
-      return []; # If no recipes, an empty list is returned
+      # If no recipes, an empty list is returned
+      return [];
    }
 
 Get Recipe By ID
