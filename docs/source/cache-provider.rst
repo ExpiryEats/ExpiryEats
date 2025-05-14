@@ -1,13 +1,14 @@
-.. _cacheManager:
+.. _cacheProvider:
 
-Cache Manager
-=============
+Cache Provider
+==============
 
 Overview
 --------
 
 Fetch User Data
---------
+---------------
+
 The manaager calls to the Supabase Database with the following method:
 
 ``final email = Supabase.instance.client.auth.currentUser?.email;``
