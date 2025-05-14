@@ -1,7 +1,7 @@
+.. _recipeManager:
+
 Recipe Manager
 ================
-
-.. _recipeManager:
 
 Overview
 --------

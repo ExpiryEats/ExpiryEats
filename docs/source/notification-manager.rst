@@ -1,7 +1,7 @@
+.. _notificationManager:
+
 Notification Manager
 ====================
-
-.. _notificationManager:
 
 Overview
 --------
@@ -37,7 +37,41 @@ A list of all items expiring within the next 7 days is then derived from this:
         return expiryDate.isBefore(soon);
     });
 
+Once these items are returned, the Notification Manager will iterate over each of them and perform the following steps:
 
+1. Determine how many days the item has left until expiry.
+
+.. code-block:: console
+
+    final expiryDate = DateTime.parse(item['expiration_date']);
+    final daysLeft = expiryDate.difference(now).inDays;
+
+    final message = daysLeft < 0
+        ? "Your item '${item['item_name']}' has expired."
+        : "Your item '${item['item_name']}' expires in $daysLeft day${daysLeft == 1 ? '' : 's'}.";
+
+2. Check if a notification already exists for this item.
+
+.. code-block:: console
+
+    final exists = existingNotifications.any((n) =>
+        n['person_id'] == personId &&
+        n['message'] == message &&
+        n['type_id'] == typeId &&
+        n['item_id'] == itemId);
+
+3. Add a notification if one does not exist.
+
+.. code-block:: console
+
+    if (!exists) {
+        await _db.insertNotification(
+            personId: personId,
+            message: message,
+            typeId: typeId,
+            itemId: itemId,
+        );
+    }
 
 .. autosummary::
    :toctree: generated

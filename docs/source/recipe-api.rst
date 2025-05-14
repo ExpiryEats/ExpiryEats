@@ -1,7 +1,7 @@
+.. _recipeAPI:
+
 Recipe API
 ==========
-
-.. _recipeAPI:
 
 Overview
 --------
