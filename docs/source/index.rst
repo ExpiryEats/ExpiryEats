@@ -19,3 +19,4 @@ Contents
    notification-manager
    database-manager
    cache-provider
+   cache-manager
