@@ -1,7 +1,7 @@
 .. _cacheManager:
 
-Database Manager
-================
+Cache Manager
+=============
 
 Overview
 --------
