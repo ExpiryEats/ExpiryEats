@@ -265,7 +265,7 @@ Fetch Image URL
 
 This method takes the name of an item being added and requests an image source from the API.
 
-``Future<String?> fetchImageUrl(String query) async {}``
+``static Future<String?> fetchImageUrl(String query) async {}``
 
 * query - The name of the item to search for.
 
