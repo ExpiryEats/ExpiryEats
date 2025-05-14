@@ -16,3 +16,5 @@ Contents
 
    recipe-manager
    recipe-api
+   notification-manager
+   database-manager
