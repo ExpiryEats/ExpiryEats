@@ -255,6 +255,8 @@ This method passes the user's credentials to the database to log them into the A
         }
     }
 
+.. _unsplashService:
+
 Unsplash Service
 ================
 
@@ -263,7 +265,7 @@ Fetch Image URL
 
 This method takes the name of an item being added and requests an image source from the API.
 
-``Future<String?> fetchImageUrl(String query) async {}``
+``static Future<String?> fetchImageUrl(String query) async {}``
 
 * query - The name of the item to search for.
 
