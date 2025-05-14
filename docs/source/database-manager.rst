@@ -168,8 +168,8 @@ This method dismisses a notification using its unique identifier:
 
 .. _authManager:
 
-Authentication management
-=========================
+Auth Manager
+============
 
 Sign Up
 -------
@@ -177,6 +177,12 @@ Sign Up
 This method handles when new users register with the App, creating a new entry for them in the database:
 
 ``Future<AuthResponse> signUp(String email, String password, String firstName, String lastName, List<int> selectedRestrictionIds) async {}``
+
+* email - The unique email address of the user.
+* password - The user's password.
+* firstName - The user's first name.
+* lastName - The user's last name.
+* selectedRestrictionIds - The ids of the user's selected dietary restrictions.
 
 .. code-block:: console
 
@@ -187,6 +193,7 @@ This method handles when new users register with the App, creating a new entry f
         String lastName,
         List<int> selectedRestrictionIds,
     ) async {
+        # Checks if email and password are valid
         final response = await _supabase.auth.signUp(
             email: email,
             password: password,
@@ -194,6 +201,7 @@ This method handles when new users register with the App, creating a new entry f
 
         final authId = response.user?.id;
 
+        # If everything is fine the user with be added
         if (authId != null) {
             final insertResult = await _supabase
                 .from('person')
@@ -218,6 +226,64 @@ This method handles when new users register with the App, creating a new entry f
         }
 
         return response;
+    }
+
+Log In
+------
+
+This method passes the user's credentials to the database to log them into the App.
+
+``Future<AuthResponse?> logIn(String email, String password) async {}``
+
+* email - The unique email address of the user.
+* password - The user's password.
+
+.. code-block:: console
+
+    Future<AuthResponse?> logIn(String email, String password) async {
+        try {
+            # Attempts to Sign In the user
+            final response = await _supabase.auth.signInWithPassword(
+                email: email,
+                password: password,
+            );
+            return response;
+        } catch (e) {
+            # Handles the error
+            print('Login error: $e');
+            return null;
+        }
+    }
+
+Unsplash Service
+================
+
+Fetch Image URL
+---------------
+
+This method takes the name of an item being added and requests an image source from the API.
+
+``Future<String?> fetchImageUrl(String query) async {}``
+
+* query - The name of the item to search for.
+
+.. code-block:: console
+
+    static Future<String?> fetchImageUrl(String query) async {
+        final url = Uri.parse('https://api.unsplash.com/search/photos?query=$query&client_id=$accessKey');
+
+        final response = await http.get(url);
+
+        # Checks if the API returns a good response
+        if (response.statusCode == 200) {
+            final data = jsonDecode(response.body);
+            final results = data['results'];
+            if (results.isNotEmpty) {
+                return results[0]['urls']['regular'];
+            }
+        }
+        # Returns nothing if no image is found
+        return null;
     }
 
 .. autosummary::
