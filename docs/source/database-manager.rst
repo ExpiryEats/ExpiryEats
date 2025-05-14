@@ -166,6 +166,60 @@ This method dismisses a notification using its unique identifier:
             .update({'dismissed': true}).eq('notification_id', notificationId);
     }
 
+.. _authManager:
+
+Authentication management
+=========================
+
+Sign Up
+-------
+
+This method handles when new users register with the App, creating a new entry for them in the database:
+
+``Future<AuthResponse> signUp(String email, String password, String firstName, String lastName, List<int> selectedRestrictionIds) async {}``
+
+.. code-block:: console
+
+    Future<AuthResponse> signUp(
+        String email,
+        String password,
+        String firstName,
+        String lastName,
+        List<int> selectedRestrictionIds,
+    ) async {
+        final response = await _supabase.auth.signUp(
+            email: email,
+            password: password,
+        );
+
+        final authId = response.user?.id;
+
+        if (authId != null) {
+            final insertResult = await _supabase
+                .from('person')
+                .insert({
+                    'person_first_name': firstName,
+                    'person_last_name': lastName,
+                    'person_email': email,
+                })
+                .select()
+                .single();
+
+            final personId = insertResult['person_id'];
+
+            final inserts = selectedRestrictionIds.map((id) {
+                return {
+                    'person_id': personId,
+                    'restriction_id': id,
+                };
+            }).toList();
+
+            await _supabase.from('person_dietary_restrictions').insert(inserts);
+        }
+
+        return response;
+    }
+
 .. autosummary::
    :toctree: generated
 
