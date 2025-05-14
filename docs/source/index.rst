@@ -20,3 +20,4 @@ Contents
    database-manager
    cache-provider
    cache-manager
+   barcode-scanner-api
