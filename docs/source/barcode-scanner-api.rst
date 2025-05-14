@@ -62,4 +62,15 @@ The method finds product data such as name and if possible the expiry date and c
     }
   }
 
-There 
+The method uses the Open Food Facts API to fetch product data. It checks if the response is successful and if the product is found in the database. If the product is found, it updates the UI with the product data. If not, it shows a message indicating that the product was not found.
+Example:
+>>> input = barcode-scanner-api._fetchProductInfo('1234567890123')
+
+>>> output
+    {
+      "product_name": "Mac and Cheese",
+      "expiration_date": "2023-12-31",
+      "categories": ["Dairy", "Cheese"] 
+      #Expiry and category are optional
+    }
+

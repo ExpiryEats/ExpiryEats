@@ -81,14 +81,13 @@ this method filters the items in the database using the dietary restrictions set
   If a recipe contains any of the dietary restrictions, it will be filtered out.
   For example: User has a restriction of "egg" and the recipe contains "egg", it will be filtered out.
 
-.. code-block:: console
-    >>> Before filtering:
-      [Recipe(name: "Omelette", ingredients: ['egg', 'cheese', 'spinach']),
-      Recipe(name: "Lasagna", ingredients: ['pasta', 'beef', 'cheese']),
-      Recipe(name: "Mashed Potatoes", ingredients: ['potato', 'chicken', 'herbs'])]
+>>> Before filtering:
+[Recipe(name: "Omelette", ingredients: ['egg', 'cheese', 'spinach']),
+Recipe(name: "Lasagna", ingredients: ['pasta', 'beef', 'cheese']),
+Recipe(name: "Mashed Potatoes", ingredients: ['potato', 'chicken', 'herbs'])]
 
-      >>> After filtering:
-      [Recipe(name: "Lasagna", ingredients: ['pasta', 'beef', 'cheese']),
+>>> After filtering:
+[Recipe(name: "Lasagna", ingredients: ['pasta', 'beef', 'cheese']),
 
 Adding recipe to the database
 --------------------------------
