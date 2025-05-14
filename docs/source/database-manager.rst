@@ -9,7 +9,7 @@ Overview
 Get All Items
 -------------
 
-The Database Manager calls to the Supabase Database with the following function:
+The Database Manager calls to the Supabase Database with the following method:
 
 ``Future<List<Map<String, dynamic>>> getAllItems(int personId) async {}``
 
@@ -30,7 +30,7 @@ The Database Manager calls to the Supabase Database with the following function:
 Insert An Item
 --------------
 
-This function simply adds an item to the database using its data:
+This method simply adds an item to the database using its data:
 
 ``Future<void> insertItem(Map<String, dynamic> itemData) async {}``
 
@@ -45,11 +45,36 @@ This function simply adds an item to the database using its data:
 Delete An Item
 --------------
 
-This function simply adds an item to the database using its data:
+This method simply adds an item to the database using its data:
 
-``Future<void> insertItem(Map<String, dynamic> itemData) async {}``
+``Future<void> deleteItem(int itemId) async {}``
 
 * itemId - The unique identifier for an individual item.
+
+.. code-block:: console
+
+    Future<void> deleteItem(int itemId) async {
+        await _supabase.from('item').delete().eq('item_id', itemId);
+    }
+
+Get Dietary Requirements
+------------------------
+
+This method gets the dietary requirements set by users:
+
+``Future<List<Map<String, dynamic>>> getPersonDietaryRestrictions(int personId) async {}``
+
+* personId - The unique identifier of an individual user.
+
+.. code-block:: console
+
+    Future<List<Map<String, dynamic>>> getPersonDietaryRestrictions(int personId) async {
+        final response = await _supabase
+            .from('person_dietary_restrictions')
+            .select('restriction_id, dietary_restrictions(restriction_name)')
+            .eq('person_id', personId);
+        return List<Map<String, dynamic>>.from(response);
+    }
 
 .. autosummary::
    :toctree: generated
