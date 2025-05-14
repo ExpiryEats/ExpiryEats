@@ -104,6 +104,33 @@ This method will retrieve all notifications associated with a particular user. I
 Insert Notification
 -------------------
 
+This method inserts notifications into the database with a message relating to a specific item.
+
+``Future<void> insertNotification({required int personId, required String message, required int typeId, int? itemId}) async {}``
+
+.. code-block:: console
+
+    Future<void> insertNotification({
+        required int personId,
+        required String message,
+        required int typeId,
+        int? itemId,
+    }) async {
+        final notificationData = {
+            'person_id': personId,
+            'message': message,
+            'type_id': typeId,
+            'sent_at': DateTime.now().toIso8601String(),
+            'dismissed': false,
+        };
+
+        if (itemId != null) {
+            notificationData['item_id'] = itemId;
+        }
+
+        await _supabase.from('notification').insert(notificationData);
+    }
+
 Delete Notification
 -------------------
 
