@@ -1,7 +1,7 @@
+.. _databaseManager:
+
 Database Manager
 ================
-
-.. _databaseManager:
 
 Overview
 --------
