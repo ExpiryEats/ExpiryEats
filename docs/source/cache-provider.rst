@@ -48,4 +48,7 @@ Using the user's email, the manager retrieves the user's data which includes the
       notifyListeners();
     }
 
+.. autosummary::
+   :toctree: generated
 
+   ExpiryEats
