@@ -76,6 +76,47 @@ This method gets the dietary requirements set by users:
         return List<Map<String, dynamic>>.from(response);
     }
 
+Get Notifications
+-----------------
+
+Insert Notification
+-------------------
+
+Delete Notification
+-------------------
+
+This method deletes a notification using its unique identifier:
+
+``Future<void> deleteNotification(int notificationId) async {}``
+
+* notificationId - The unique identifier of a notification.
+
+.. code-block:: console
+
+    Future<void> deleteNotification(int notificationId) async {
+        await _supabase
+            .from('notification')
+            .delete()
+            .eq('notification_id', notificationId);
+    }
+
+Dismiss Notification
+--------------------
+
+This method dismisses a notification using its unique identifier:
+
+``Future<void> dismissNotification(int notificationId) async {}``
+
+* notificationId - The unique identifier of a notification.
+
+.. code-block:: console
+
+    Future<void> dismissNotification(int notificationId) async {
+        await _supabase
+            .from('notification')
+            .update({'dismissed': true}).eq('notification_id', notificationId);
+    }
+
 .. autosummary::
    :toctree: generated
 
