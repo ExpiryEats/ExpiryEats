@@ -60,6 +60,42 @@ For example:
 >>> output
 [RecipeItem(name: "Mashed Potatoes", ingredients: ['potato', 'chicken', 'herbs'])]
 
+Filter via Dietary Restrictions
+-----------------------------
+
+this method filters the items in the database using the dietary restrictions set by the user:
+
+.. code-block:: console
+
+    List<Recipe> filterRecipesByDiet(
+    List<Recipe> allRecipes,
+    List<String> userDietaryRestrictions,
+  ) {
+    return allRecipes.where((recipe) {
+      return !recipe.ingredients.any((ingredient) =>
+          userDietaryRestrictions.any((restriction) =>
+              ingredient.toLowerCase().contains(restriction.toLowerCase())));
+    }).toList();
+  }
+
+  If a recipe contains any of the dietary restrictions, it will be filtered out.
+  For example: User has a restriction of "egg" and the recipe contains "egg", it will be filtered out.
+
+.. code-block:: console
+    >>> Before filtering:
+      [Recipe(name: "Omelette", ingredients: ['egg', 'cheese', 'spinach']),
+      Recipe(name: "Lasagna", ingredients: ['pasta', 'beef', 'cheese']),
+      Recipe(name: "Mashed Potatoes", ingredients: ['potato', 'chicken', 'herbs'])]
+
+      >>> After filtering:
+      [Recipe(name: "Lasagna", ingredients: ['pasta', 'beef', 'cheese']),
+
+Adding recipe to the database
+--------------------------------
+
+
+
+
 Format Items
 ------------
 This function takes each ingredient of a recipe and joins them together into a single string.
