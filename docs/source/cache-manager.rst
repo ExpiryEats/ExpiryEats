@@ -8,8 +8,8 @@ Overview
 
 The **Cache Manager** is used to temporarily store user data to reduce database requests.
 
-Fetch User Data
----------------
+Storing User Data
+-----------------
 
 The manaager calls to the Supabase Database with the following method:
 
