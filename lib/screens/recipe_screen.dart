@@ -16,16 +16,54 @@ class RecipeScreen extends StatefulWidget {
 class RecipeScreenState extends State<RecipeScreen> {
   final RecipeManager manager = RecipeManager();
   late List<Recipe> _displayRecipes;
+  List<Recipe> _savedRecipes = [];
 
   final List<Recipe> _allRecipes = [
-    Recipe(name: "Omelette", imgSrc: "assets/testing_image.jpg", ingredients: ['egg', 'cheese', 'spinach']),
-    Recipe(name: "Lasagna", imgSrc: "assets/testing_image.jpg", ingredients: ['pasta', 'beef', 'cheese']),
+    Recipe(
+        name: "Test Recipe",
+        imgSrc: "assets/testing_image.jpg",
+        ingredients: ['bacon', 'pasta', 'tomato']),
+    Recipe(
+        name: "Omelette",
+        imgSrc: "assets/testing_image.jpg",
+        ingredients: ['egg', 'cheese', 'spinach']),
+    Recipe(
+        name: "Lasagna",
+        imgSrc: "assets/testing_image.jpg",
+        ingredients: ['pasta', 'beef', 'cheese']),
+    Recipe(
+        name: "Mashed Potatoes",
+        imgSrc: "assets/testing_image.jpg",
+        ingredients: ['potato', 'chicken', 'herbs']),
   ];
 
   @override
   void initState() {
     super.initState();
-    _displayRecipes = _allRecipes;
+    _savedRecipes = [
+      Recipe(
+          name: "Test Recipe",
+          imgSrc: "assets/testing_image.jpg",
+          ingredients: ['bacon', 'pasta', 'tomato']),
+      Recipe(
+          name: "Omelette",
+          imgSrc: "assets/testing_image.jpg",
+          ingredients: ['egg', 'cheese', 'spinach']),
+      Recipe(
+          name: "Lasagna",
+          imgSrc: "assets/testing_image.jpg",
+          ingredients: ['pasta', 'beef', 'cheese']),
+      Recipe(
+          name: "Mashed Potatoes",
+          imgSrc: "assets/testing_image.jpg",
+          ingredients: ['potato', 'chicken', 'herbs']),
+    ];
+    _displayRecipes = _savedRecipes;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -33,54 +71,61 @@ class RecipeScreenState extends State<RecipeScreen> {
     return Scaffold(
       backgroundColor: AppTheme.surface,
       body: _allRecipes.isNotEmpty
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Column(
-                children: [
-                  SearchBar(
+          ? Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SearchBar(
                     leading: const Icon(Icons.search),
                     hintText: 'Search Saved Recipes',
                     onChanged: (query) {
                       setState(() => _displayRecipes =
-                          RecipeManager.filterRecipes(query.toLowerCase(), _allRecipes));
+                          RecipeManager.filterRecipes(
+                              query.toLowerCase(), _allRecipes));
                     },
                   ),
-                  const SizedBox(height: 12),
-                  Expanded(
-                    child: FadingEdgeScrollView.fromScrollView(
-                      gradientFractionOnStart: 0.2,
-                      gradientFractionOnEnd: 0.2,
-                      child: ListView(
+                ),
+                Expanded(
+                  child: FadingEdgeScrollView.fromScrollView(
+                    gradientFractionOnStart: 0.2,
+                    gradientFractionOnEnd: 0.2,
+                    child: ListView(
                         controller: ScrollController(),
-                        children: manager.populateRecipes(
-                          context,
-                          _displayRecipes,
-                          MediaQuery.sizeOf(context).width,
-                        ),
-                      ),
-                    ),
+                        children:
+                            manager.populateRecipes(context, _displayRecipes)),
                   ),
-                ],
-              ),
+                ),
+              ],
             )
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Center(
-                child: Text(
-                  'No Saved Recipes',
-                  style: AppTextStyle.bold(),
+          : Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Align(
+                  alignment: Alignment(0.0, 0.0),
+                  child: Text(
+                    'No Saved Recipes',
+                    style: AppTextStyle.bold(),
+                  ),
                 ),
               ),
             ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final savedRecipe = await Navigator.push<Recipe>(
             context,
             MaterialPageRoute(builder: (context) => const FindRecipeScreen()),
           );
+          if (savedRecipe != null) {
+            setState(() {
+              _savedRecipes.add(savedRecipe);
+              _displayRecipes = _savedRecipes;
+            });
+          }
         },
-        icon: const Icon(Icons.add),
-        label: const Text('Find New Recipes'),
+        icon: Icon(Icons.add),
+        label: Text('Find New Recipes'),
         foregroundColor: AppTheme.surface,
         backgroundColor: AppTheme.primary40,
         hoverColor: AppTheme.primary80,

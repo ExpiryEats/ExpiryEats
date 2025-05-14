@@ -7,30 +7,50 @@ import 'package:http/http.dart';
 class RecipeManager {
   get http => null;
 
-  static List<Recipe> filterRecipes(String? searchTerm, List<Recipe> allRecipes) {
+  static List<Recipe> filterRecipes(
+      String? searchTerm, List<Recipe> allRecipes) {
     List<Recipe> output;
     if (searchTerm == null || searchTerm == '') {
       output = allRecipes;
     } else {
-      output = allRecipes.where((recipe) =>
-        recipe.name.toLowerCase().contains(searchTerm) ||
-        recipe.ingredients.any((ingredient) => ingredient.toLowerCase().contains(searchTerm)
-      )).toList();
+      output = allRecipes
+          .where((recipe) =>
+              recipe.name.toLowerCase().contains(searchTerm) ||
+              recipe.ingredients.any((ingredient) =>
+                  ingredient.toLowerCase().contains(searchTerm)))
+          .toList();
     }
 
     return output;
   }
 
-  List<Widget> populateRecipes(BuildContext context, List<Recipe> displayRecipes, double width) {
+  List<Recipe> filterRecipesByDiet(
+    List<Recipe> allRecipes,
+    List<String> userDietaryRestrictions,
+  ) {
+    return allRecipes.where((recipe) {
+      return !recipe.ingredients.any((ingredient) =>
+          userDietaryRestrictions.any((restriction) =>
+              ingredient.toLowerCase().contains(restriction.toLowerCase())));
+    }).toList();
+  }
+
+  List<Widget> populateRecipes(
+      BuildContext context, List<Recipe> displayRecipes) {
     List<Widget> output = [];
     for (Recipe recipe in displayRecipes) {
-      output.add(RecipeItem(name: recipe.name, imgSrc: recipe.imgSrc, ingredients: recipe.ingredients,));
+      output.add(RecipeItem(
+        name: recipe.name,
+        imgSrc: recipe.imgSrc,
+        ingredients: recipe.ingredients,
+      ));
     }
     return output;
   }
 
   Future<List<Recipe>> getRecipesByIngredient(String? query) async {
-    final url = Uri.https('themealdb.com', '/api/json/v1/1/filter.php', {'i': '$query'});
+    final url = Uri.https(
+        'themealdb.com', '/api/json/v1/1/filter.php', {'i': '$query'});
 
     try {
       final response = await get(url);
@@ -41,27 +61,32 @@ class RecipeManager {
     } catch (e) {
       print(e);
     }
-    
+
     return [];
   }
 
   Future<List<Recipe>> getRecipesById(List<dynamic> meals) async {
     List<Recipe> output = [];
     for (final recipe in meals) {
-      final url = Uri.https('themealdb.com', '/api/json/v1/1/lookup.php', {'i': recipe["idMeal"]!});
+      final url = Uri.https('themealdb.com', '/api/json/v1/1/lookup.php',
+          {'i': recipe["idMeal"]!});
       try {
         final response = await get(url);
         if (response.statusCode == 200) {
           final fullRecipe = json.decode(response.body)["meals"][0];
           List<String> ingredients = [];
           for (int i = 1; i <= 20; i++) {
-            if (fullRecipe["strIngredient$i"] == "" || fullRecipe["strIngredient$i"] == null) {
+            if (fullRecipe["strIngredient$i"] == "" ||
+                fullRecipe["strIngredient$i"] == null) {
               break;
             } else {
               ingredients.add(fullRecipe["strIngredient$i"]);
             }
           }
-          output.add(Recipe(name: recipe["strMeal"]!, imgSrc: recipe["strMealThumb"]!, ingredients: ingredients));
+          output.add(Recipe(
+              name: recipe["strMeal"]!,
+              imgSrc: recipe["strMealThumb"]!,
+              ingredients: ingredients));
         }
       } catch (e) {
         print(e);

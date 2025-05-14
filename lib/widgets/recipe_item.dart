@@ -7,14 +7,17 @@ class RecipeItem extends StatelessWidget {
   final String imgSrc;
   final String name;
   final List<String> ingredients;
-
   final RecipeManager manager = RecipeManager();
+  final VoidCallback? onSave;
+  final bool showSaveButton;
 
   RecipeItem({
     super.key,
     required this.name,
     required this.imgSrc,
-    required this.ingredients
+    required this.ingredients,
+    this.onSave,
+    this.showSaveButton = false,
   });
 
   @override
@@ -23,59 +26,68 @@ class RecipeItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       child: Card(
         clipBehavior: Clip.hardEdge,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RecipeInfoScreen(
-                recipeName: name,
-                recipeItems: ingredients,
-                imgSrc: imgSrc,
-              ))
-            );
-            debugPrint('Item tapped: $name');
-          },
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: MediaQuery.of(context).size.height,
-                  child: Image.network(
-                    imgSrc,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: AppTextStyle.bold()
-                        ),
-                        Text(
-                          "Ingredients",
-                          style: AppTextStyle.medium(),
-                        ),
-                        Text(
-                          manager.formatItems(manager.capitaliseItems(ingredients)),
-                          style: AppTextStyle.small(),
-                          maxLines: 5,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+        child: Stack(
+          children: [
+            InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipeInfoScreen(
+                      recipeName: name,
+                      recipeItems: ingredients,
+                      imgSrc: imgSrc,
                     ),
                   ),
+                );
+              },
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 200,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      height: MediaQuery.of(context).size.height,
+                      child: Image.network(
+                        imgSrc,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(name, style: AppTextStyle.bold()),
+                            Text("Ingredients", style: AppTextStyle.medium()),
+                            Text(
+                              manager.formatItems(
+                                  manager.capitaliseItems(ingredients)),
+                              style: AppTextStyle.small(),
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+            if (showSaveButton)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: IconButton(
+                  icon: const Icon(Icons.bookmark_add),
+                  onPressed: onSave,
+                ),
+              ),
+          ],
         ),
       ),
     );
