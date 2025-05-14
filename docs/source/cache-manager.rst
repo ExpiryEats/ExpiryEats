@@ -1,0 +1,76 @@
+.. _cacheManager:
+
+Cache Manager
+=============
+
+Overview
+--------
+
+The **Cache Manager** is used to temporarily store user data to reduce database requests.
+
+Storing User Data
+-----------------
+
+The manaager calls to the Supabase Database with the following method:
+
+.. code-block:: console
+
+    class CacheManager {
+        # User data
+        final int? userId;
+        final String? firstName;
+        final String? lastName;
+        final String? email;
+        final String? householdId;
+        final List<String> dietaryRequirements;
+
+        # Reference data
+        final List<Map<String, dynamic>> categories;
+        final List<Map<String, dynamic>> storageTypes;
+        final List<Map<String, dynamic>> dietaryRestrictionTypes;
+        final List<Map<String, dynamic>> notificationTypes;
+
+        CacheManager({
+            this.userId,
+            this.firstName,
+            this.lastName,
+            this.email,
+            this.householdId,
+            this.dietaryRequirements = const [],
+            this.categories = const [],
+            this.storageTypes = const [],
+            this.dietaryRestrictionTypes = const [],
+            this.notificationTypes = const [],
+        });
+
+        CacheManager copyWith({
+            int? userId,
+            String? firstName,
+            String? lastName,
+            String? email,
+            String? householdId,
+            List<String>? dietaryRequirements,
+            List<Map<String, dynamic>>? categories,
+            List<Map<String, dynamic>>? storageTypes,
+            List<Map<String, dynamic>>? dietaryRestrictionTypes,
+            List<Map<String, dynamic>>? notificationTypes,
+        }) {
+            return CacheManager(
+                userId: userId ?? this.userId,
+                firstName: firstName ?? this.firstName,
+                lastName: lastName ?? this.lastName,
+                email: email ?? this.email,
+                householdId: householdId ?? this.householdId,
+                dietaryRequirements: dietaryRequirements ?? this.dietaryRequirements,
+                categories: categories ?? this.categories,
+                storageTypes: storageTypes ?? this.storageTypes,
+                dietaryRestrictionTypes: dietaryRestrictionTypes ?? this.dietaryRestrictionTypes,
+                notificationTypes: notificationTypes ?? this.notificationTypes,
+            );
+        }
+    }
+
+.. autosummary::
+   :toctree: generated
+
+   ExpiryEats

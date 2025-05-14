@@ -1,6 +1,6 @@
 .. _cacheManager:
 
-Cache Manager
+Cache Provider
 ================
 
 Overview
@@ -8,6 +8,7 @@ Overview
 
 Fetch User Data
 --------------
+
 The manaager calls to the Supabase Database with the following method:
 
 ``Future<void> fetchUserFromDatabase() async {}``
