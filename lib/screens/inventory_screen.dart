@@ -1,4 +1,3 @@
-import 'package:expiry_eats/styles.dart';
 import 'package:expiry_eats/widgets/add_item_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:expiry_eats/colors.dart';
@@ -8,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
 
-// TODO: add images from unsplash api
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -21,6 +19,7 @@ class InventoryScreenState extends State<InventoryScreen> {
   Map<String, List<Item>> _groupedDisplayItems = {};
   List<Item> _allItems = [];
   List<Item> _displayItems = [];
+  final Map<String, bool> _expandedCategories ={}; 
 
   @override
   void initState() {
@@ -40,6 +39,9 @@ class InventoryScreenState extends State<InventoryScreen> {
       _allItems = fetchedItems.map((data) => Item.fromMap(data)).toList();
       _displayItems = _allItems;
       _groupedDisplayItems = _updateGroups();
+      _expandedCategories.addAll(
+        _groupedDisplayItems.map((key, value) => MapEntry(key, false),)
+      );
     });
   }
 
@@ -100,55 +102,63 @@ class InventoryScreenState extends State<InventoryScreen> {
               children: _groupedDisplayItems.entries.map((entry) {
                 final categoryName = entry.key;
                 final items = entry.value;
+                final isExpanded = _expandedCategories[categoryName] ?? false;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        categoryName,
-                        style: AppTextStyle.bold(),
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(categoryName),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Chip(
+                              label: Text(items.length.toString()),
+                              backgroundColor: AppTheme.primary40,
+                              labelStyle: TextStyle(color: AppTheme.surface),
+                            ),
+                            Icon(
+                              isExpanded ? Icons.expand_less : Icons.expand_more,
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _expandedCategories[categoryName] = !isExpanded;
+                          });
+                        },
                       ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: InventoryItem(
-                          key: ValueKey(item.itemId),
-                          itemId: item.itemId!,
-                          imageUrl: item.imageUrl,
-                          itemName: item.itemName,
-                          category: categoryName,
-                          itemDateAdded: item.dateAdded.toIso8601String(),
-                          itemExpiryDate: item.expirationDate.toIso8601String(),
-                          ),
-                        ); 
-                      },
-                    ),
-                  ],
+                      if (isExpanded)
+                        Column(
+                          children: items.map((item) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            child: InventoryItem(
+                              key: ValueKey(item.itemId),
+                              itemId: item.itemId!,
+                              imageUrl: item.imageUrl,
+                              itemName: item.itemName,
+                              category: categoryName,
+                              itemDateAdded: item.dateAdded.toIso8601String(),
+                              itemExpiryDate: item.expirationDate.toIso8601String(),
+                            ),
+                          )).toList(),
+                        ),
+                    ],
+                  ),
                 );
               }).toList(),
             ),
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.primary40,
         foregroundColor: AppTheme.surface,
-        hoverColor: AppTheme.primary80,
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AddItemDialogue(
-            onItemAdded: (newItem) {
-              _addNewItem(newItem);
-            },
+            onItemAdded: (newItem) => _addNewItem(newItem),
           ),
         ),
         child: const Icon(Icons.add),
