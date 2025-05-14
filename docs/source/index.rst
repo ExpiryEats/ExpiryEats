@@ -18,3 +18,4 @@ Contents
    recipe-api
    notification-manager
    database-manager
+   cache-provider
