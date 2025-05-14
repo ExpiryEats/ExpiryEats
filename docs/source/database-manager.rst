@@ -255,6 +255,8 @@ This method passes the user's credentials to the database to log them into the A
         }
     }
 
+.. _unsplashService:
+
 Unsplash Service
 ================
 
