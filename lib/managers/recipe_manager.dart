@@ -49,6 +49,10 @@ class RecipeManager {
   }
 
   Future<List<Recipe>> getRecipesByIngredient(String? query) async {
+    if (query == '') {
+      return [];
+    }
+
     final url = Uri.https(
         'themealdb.com', '/api/json/v1/1/filter.php', {'i': '$query'});
 
