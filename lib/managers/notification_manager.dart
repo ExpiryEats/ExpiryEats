@@ -1,10 +1,11 @@
 import 'package:expiry_eats/managers/database_manager.dart';
+import 'package:flutter/material.dart';
 
 class NotificationManager {
   final DatabaseService _db = DatabaseService();
 
   Future<void> expiryNotifications(int personId) async {
-    print("Checking for missing expiry notifications for user $personId");
+    debugPrint("Checking for missing expiry notifications for user $personId");
 
     final now = DateTime.now();
     final soon = now.add(const Duration(days: 7));

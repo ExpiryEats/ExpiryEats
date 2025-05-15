@@ -8,7 +8,7 @@ import 'home_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -34,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final response = await authManager.logIn(email, password);
 
     if (response?.user != null) {
+      // ignore: use_build_context_synchronously
       final cacheProvider = Provider.of<CacheProvider>(context, listen: false);
       await cacheProvider.fetchUserFromDatabase();
 
@@ -42,11 +43,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
     } else {
       if (mounted) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('We were unable to log you in.')),
         );

@@ -15,9 +15,9 @@ class RecipeManager {
     } else {
       output = allRecipes
           .where((recipe) =>
-              recipe.name.toLowerCase().contains(searchTerm) ||
+              recipe.name.toLowerCase().contains(searchTerm.toLowerCase()) ||
               recipe.ingredients.any((ingredient) =>
-                  ingredient.toLowerCase().contains(searchTerm)))
+                  ingredient.toLowerCase().contains(searchTerm.toLowerCase())))
           .toList();
     }
 
@@ -59,7 +59,7 @@ class RecipeManager {
         return getRecipesById(listResponse["meals"]);
       }
     } catch (e) {
-      print(e);
+      debugPrint('Fetch Error: $e');
     }
 
     return [];
@@ -89,7 +89,7 @@ class RecipeManager {
               ingredients: ingredients));
         }
       } catch (e) {
-        print(e);
+        debugPrint('Fetch Error $e');
       }
     }
     return output;

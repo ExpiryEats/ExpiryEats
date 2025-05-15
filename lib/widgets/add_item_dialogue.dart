@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:expiry_eats/managers/database_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/item.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
@@ -152,6 +150,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
       );
 
       widget.onItemAdded(newItem);
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } else {
       _showSnackBar('Please complete all fields');
