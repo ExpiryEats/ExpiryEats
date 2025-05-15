@@ -15,9 +15,9 @@ class RecipeManager {
     } else {
       output = allRecipes
           .where((recipe) =>
-              recipe.name.toLowerCase().contains(searchTerm) ||
+              recipe.name.toLowerCase().contains(searchTerm.toLowerCase()) ||
               recipe.ingredients.any((ingredient) =>
-                  ingredient.toLowerCase().contains(searchTerm)))
+                  ingredient.toLowerCase().contains(searchTerm.toLowerCase())))
           .toList();
     }
 
