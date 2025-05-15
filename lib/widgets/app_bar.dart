@@ -66,6 +66,7 @@ class Constants {
                 if (confirmed == true) {
                   await Supabase.instance.client.auth.signOut();
                   Navigator.pushAndRemoveUntil(
+                    // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()),

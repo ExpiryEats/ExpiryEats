@@ -59,7 +59,7 @@ class RecipeManager {
         return getRecipesById(listResponse["meals"]);
       }
     } catch (e) {
-      print(e);
+      debugPrint('Fetch Error: $e');
     }
 
     return [];
@@ -89,7 +89,7 @@ class RecipeManager {
               ingredients: ingredients));
         }
       } catch (e) {
-        print(e);
+        debugPrint('Fetch Error $e');
       }
     }
     return output;
