@@ -7,6 +7,7 @@ import 'package:expiry_eats/widgets/inventory_item.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/managers/cache_provider.dart';
 import 'package:expiry_eats/managers/database_manager.dart';
+import 'package:expiry_eats/managers/inventory_manager.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -19,6 +20,8 @@ class InventoryScreenState extends State<InventoryScreen> {
   Map<String, List<Item>> _groupedDisplayItems = {};
   List<Item> _allItems = [];
   List<Item> _displayItems = [];
+
+  InventoryManager manager = InventoryManager();
 
   @override
   void initState() {
@@ -85,9 +88,7 @@ class InventoryScreenState extends State<InventoryScreen> {
               hintText: 'Search Inventory',
               onChanged: (query) {
                 setState(() {
-                  _displayItems = _allItems.where((item) {
-                    return item.itemName.toLowerCase().contains(query.toLowerCase());
-                  }).toList();
+                  _displayItems = manager.filterInventory(query, _allItems);
                   _groupedDisplayItems = _updateGroups();
                 });
               },

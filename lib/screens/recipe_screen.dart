@@ -80,7 +80,7 @@ class RecipeScreenState extends State<RecipeScreen> {
                     hintText: 'Search Saved Recipes',
                     onChanged: (query) {
                       setState(() => _displayRecipes =
-                          RecipeManager.filterRecipes(
+                          manager.filterRecipes(
                               query.toLowerCase(), _allRecipes));
                     },
                   ),
