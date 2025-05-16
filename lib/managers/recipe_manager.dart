@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 class RecipeManager {
   get http => null;
 
-  static List<Recipe> filterRecipes(
+  List<Recipe> filterRecipes(
       String? searchTerm, List<Recipe> allRecipes) {
     List<Recipe> output;
     if (searchTerm == null || searchTerm == '') {
@@ -63,7 +63,7 @@ class RecipeManager {
         return getRecipesById(listResponse["meals"]);
       }
     } catch (e) {
-      debugPrint('Fetch Error: $e');
+      debugPrint('Fetch Error: $e\nInput: $query');
     }
 
     return [];

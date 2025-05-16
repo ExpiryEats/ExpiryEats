@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:expiry_eats/managers/database_manager.dart';
+import 'package:expiry_eats/managers/inventory_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expiry_eats/item.dart';
@@ -21,6 +22,8 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _expiryController = TextEditingController();
+
+  InventoryManager manager = InventoryManager();
 
   int? _selectedCategoryId;
   int? _selectedStorageTypeId;
@@ -113,16 +116,6 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
     }
   }
 
-  String formatItemName(String name) {
-    return name
-        .trim()
-        .split(' ')
-        .map((word) => word.isNotEmpty
-            ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
-            : '')
-        .join(' ');
-  }
-
   void _showSnackBar(String msg) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
@@ -131,7 +124,7 @@ class _AddItemDialogueState extends State<AddItemDialogue> {
 
   void _submit() async {
     final cache = Provider.of<CacheProvider>(context, listen: false);
-    final formattedName = formatItemName(_nameController.text);
+    final formattedName = manager.formatItemName(_nameController.text);
     final imageUrl = await UnsplashService.fetchImageUrl(formattedName);
 
     if (_formKey.currentState!.validate() &&
